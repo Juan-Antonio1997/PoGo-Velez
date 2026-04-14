@@ -8,10 +8,7 @@ function register() {
     error.id = "error"
     registroGo["Password2"].after(error);
     error.append("Las contraseñas no coinciden");
-    //setTimeout(document.getElementById("error").remove(), 5000);
-    } //else {
-        //setTimeout(document.getElementById("error").remove(), 5000);
-    //}
+    }
     return false;
   }
 }

@@ -15,8 +15,7 @@
         </div>
         <div>
             <label>Email</label>
-            <input type="email" name="Email" placeholder="Email" title="Ejemplo: usuario@gmail.com"
-                pattern="^[A-Za-z0-9\!\#\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~\.]{1,64}@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" maxlength="100" required>
+            <input type="email" name="Email" placeholder="Email" maxlength="100" required>
         </div>
         <div>
             <label>Contraseña</label>
