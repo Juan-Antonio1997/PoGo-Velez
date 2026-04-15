@@ -62,6 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($db) {
         if ($fullCheck) {
             $id = db_insert($db, 'usuarios', $usuario);
+            $_SESSION['usuario'] = $usuario['Username'];
+            $_SESSION['email'] = $usuario['Email'];
             db_close($db);
             header('Location: ../');
         } else {
