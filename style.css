@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+}
+
+.pageTitle {
+    text-align: center;
+}
+
+.navList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+}
+
+.navElement {
+    float: right;
+}
+
+.navElement a, .navElement span {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navElement a:hover {
+    background-color: #111111;
+}
+
+section {
+    text-align: center;
+}
+
+.createList {
+    padding: 10px 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+article {
+    display: grid;
+}
+
+.listLink {
+    text-decoration: none;
+    color: black;
+}
+
+.pokeList {
+    border: 1px solid black;
+    width: 25%;
+    min-width: 150px;
+}
