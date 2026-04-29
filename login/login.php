@@ -10,9 +10,11 @@ if ($db) {
             $username = $usuario[0]['Username'];
             $email = $usuario[0]['Email'];
             $password = $usuario[0]['Password'];
+            $pogo_username = $usuario[0]['Pogo_Username'];
             if (($_POST['User'] === $username || $_POST['User'] === $email) && password_verify($_POST["Password"], $password)) {
                 $_SESSION['usuario'] = $username;
                 $_SESSION['email'] = $email;
+                $_SESSION['pogo_username'] = $pogo_username;
                 header('Location: ../');
                 exit;
             } else {

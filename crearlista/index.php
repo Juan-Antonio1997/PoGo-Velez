@@ -39,18 +39,15 @@ if ($db) {
     </nav>
     <section>
         <article>
-            <form>
+            <form action="crearLista.php" method="POST">
                 <div>Jefe de incursión: </div>
                 <div>
                     <?php foreach ($raidBosses as $raidBoss): ?>
                         <label>
-                            <input type="radio" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
+                            <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
                             <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" title="<?= $raidBoss['Tipo_Raid'] ?>" height="100">
                         </label>
                     <?php endforeach; ?>
-                </div>
-                <div>
-                    <input type="hidden" name="Creado_por" value="<?= $_SESSION['usuario'] ?>">
                 </div>
                 <div>
                     <label>Ubicación: </label>
@@ -62,7 +59,7 @@ if ($db) {
                 </div>
                 <div>
                     <label>Hora de quedada: </label>
-                    <input type="time" name="Hora_quedada">
+                    <input type="time" name="Hora_quedada" required>
                 </div>
                 <div>
                     <label>Hora de inicio (Opcional): </label>
@@ -77,45 +74,58 @@ if ($db) {
                 </div>
                 <div>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Soleado">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Soleado">
                         <img src="../media/raids/Weather_Icon_Clear_Day.webp" title="Soleado" height="50">
                     </label>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Despejado">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Despejado">
                         <img src="../media/raids/Weather_Icon_Clear_Night.webp" title="Despejado" height="50">
                     </label>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Parcialmente nublado (día)">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Parcialmente nublado (día)">
                         <img src="../media/raids/Weather_Icon_Partly_Cloudy_Day.webp" title="Parcialmente nublado (día)" height="50">
                     </label>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Parcialmente nublado (noche)">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Parcialmente nublado (noche)">
                         <img src="../media/raids/Weather_Icon_Partly_Cloudy_Night.webp" title="Parcialmente nublado (noche)" height="50">
                     </label>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Nublado">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Nublado">
                         <img src="../media/raids/Weather_Icon_Cloudy.webp" title="Nublado" height="50">
                     </label>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Lluvia">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Lluvia">
                         <img src="../media/raids/Weather_Icon_Rain.webp" title="Lluvia" height="50">
                     </label>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Viento">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Viento">
                         <img src="../media/raids/Weather_Icon_Windy.webp" title="Viento" height="50">
                     </label>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Niebla">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Niebla">
                         <img src="../media/raids/Weather_Icon_Foggy.webp" title="Niebla" height="50">
                     </label>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Nieve">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Nieve">
                         <img src="../media/raids/Weather_Icon_Snow.webp" title="Nieve" height="50">
                     </label>
                     <label>
-                        <input type="radio" name="Tiempo_atmos" value="Extremo">
+                        <input type="radio" class="radioImg" name="Tiempo_atmos" value="Extremo">
                         <img src="../media/raids/Weather_Icon_Extreme.webp" title="Extremo" height="50">
                     </label>
+                </div>
+                <div>
+                    <label>¿Vas a estar en persona o vas a usar un pase remoto? </label>
+                </div>
+                <div>
+                    <div>
+                        <input type="radio" name="Pase" value="Presencial" required>
+                        <label>En persona</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="Pase" value="Remoto" required>
+                        <label>Voy a usar un pase remoto</label>
+                    </div>
                 </div>
                 <div>
                     <input type="submit" value="Crear lista">
