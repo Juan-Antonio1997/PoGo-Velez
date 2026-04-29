@@ -9,11 +9,11 @@
     <form action="login.php" method="POST">
         <div>
             <label>Usuario o Email</label>
-            <input type="text" name="User" placeholder="Usuario o Email" required>
+            <input type="text" name="User" placeholder="Usuario o Email" maxlength="100" required>
         </div>
         <div>
             <label>Contraseña</label>
-            <input type="password" name="Password" placeholder="Contraseña" required>
+            <input type="password" name="Password" placeholder="Contraseña" maxlength="127" required>
         </div>
         <div>
             <input type="submit" value="Acceder">
