@@ -49,3 +49,8 @@ body {
 .radioImg:checked + img {
   outline: 2px solid #f00;
 }
+
+section {
+    margin-left: 30px;
+    margin-right: 30px;
+}
