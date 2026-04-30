@@ -13,7 +13,7 @@ session_start();
 
 <body>
     <header>
-        <a href="./" class="titleLink"><h1 class="pageTitle">PoGo Vélez-Málaga</h1></a>
+        <a href="../" class="titleLink"><h1 class="pageTitle">PoGo Vélez-Málaga</h1></a>
     </header>
     <nav>
         <?php if (isset($_SESSION['usuario'])): ?>

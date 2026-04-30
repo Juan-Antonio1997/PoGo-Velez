@@ -1,5 +1,28 @@
 <?php
+require_once('../config.php');
+require_once('../db_pdo.php');
+$db = db_open();
 session_start();
+if ($db) {
+    $listas = db_query($db, "SELECT l.ID_Lista, l.Ubicacion, l.Hora_quedada, i.ID_Pokemon, i.Tipo_Raid, i.Maximo_participantes, i.Maximo_remotos, p.Nombre 
+    FROM listas AS l
+    INNER JOIN incursiones AS i ON l.ID_Raid = i.ID_Raid
+    INNER JOIN pokemon AS p ON i.ID_Pokemon = p.ID_Pokemon
+    WHERE DATE_ADD(l.Hora_quedada, INTERVAL 1 MINUTE) > NOW()
+    ORDER BY l.Hora_quedada;");
+    $hoy = date("d/m/Y");
+    for ($i = 0; $i < count($listas); $i++) {
+        $participantes = db_query($db, "SELECT COUNT(Username) AS Num_Apuntados
+        FROM apuntados_lista WHERE ID_Lista = (?)", [$listas[$i]['ID_Lista']]);
+        $listas[$i]['Participantes'] = $participantes[0]['Num_Apuntados'];
+        $remotos = db_query($db, "SELECT COUNT(Username) AS Num_Remotos
+        FROM apuntados_lista WHERE ID_Lista = (?) AND Pase = (?)", [$listas[$i]['ID_Lista'], 'Remoto']);
+        $listas[$i]['Remotos'] = $remotos[0]['Num_Remotos'];
+        $fecha = strtotime($listas[$i]['Hora_quedada']);
+        $listas[$i]['fecha'] = date("d/m/Y", $fecha);
+        $listas[$i]['hora'] = date("H:i", $fecha);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -13,7 +36,7 @@ session_start();
 
 <body>
     <header>
-        <a href="./" class="titleLink"><h1 class="pageTitle">PoGo Vélez-Málaga</h1></a>
+        <a href="../" class="titleLink"><h1 class="pageTitle">PoGo Vélez-Málaga</h1></a>
     </header>
     <nav>
         <?php if (isset($_SESSION['usuario'])): ?>

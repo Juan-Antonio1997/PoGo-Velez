@@ -12,12 +12,22 @@ if ($db) {
     ORDER BY l.Hora_quedada;");
     $hoy = date("d/m/Y");
     for ($i = 0; $i < count($listas); $i++) {
+        #Obtengo el número de participantes por lista
         $participantes = db_query($db, "SELECT COUNT(Username) AS Num_Apuntados
         FROM apuntados_lista WHERE ID_Lista = (?)", [$listas[$i]['ID_Lista']]);
         $listas[$i]['Participantes'] = $participantes[0]['Num_Apuntados'];
+        #Obtengo los invitados y los sumo
+        $invitadoPresencial = db_query($db, "SELECT SUM(Invitado_presencial) AS Total_invitados_presenciales
+        FROM apuntados_lista WHERE ID_Lista = (?)", [$listas[$i]['ID_Lista']]);
+        $invitadoRemoto = db_query($db, "SELECT SUM(Invitado_remoto) AS Total_invitados_remotos
+        FROM apuntados_lista WHERE ID_Lista = (?)", [$listas[$i]['ID_Lista']]);
+        $listas[$i]['Participantes'] = $listas[$i]['Participantes'] + $invitadoPresencial[0]['Total_invitados_presenciales'] + $invitadoRemoto[0]['Total_invitados_remotos'];
+        #Obtengo el número de apuntados remotos
         $remotos = db_query($db, "SELECT COUNT(Username) AS Num_Remotos
         FROM apuntados_lista WHERE ID_Lista = (?) AND Pase = (?)", [$listas[$i]['ID_Lista'], 'Remoto']);
         $listas[$i]['Remotos'] = $remotos[0]['Num_Remotos'];
+        #Sumo los invitados remotos
+        $listas[$i]['Remotos'] = $listas[$i]['Remotos'] + $invitadoRemoto[0]['Total_invitados_remotos'];
         $fecha = strtotime($listas[$i]['Hora_quedada']);
         $listas[$i]['fecha'] = date("d/m/Y", $fecha);
         $listas[$i]['hora'] = date("H:i", $fecha);
@@ -54,18 +64,28 @@ if ($db) {
         <?php endif; ?>
     </nav>
     <section>
-        <button class="createList">Crear lista</button>
+        <button class="createList"><a class="buttonLink" href="crearlista">Crear lista</a></button>
         <article>
             <?php if (!empty($listas)): ?>
                 <?php foreach ($listas as $lista): ?>
-                    <a href="lista?id=<?= $lista['ID_Lista'] ?>" class="listLink">
-                        <div class="pokeList">
+                    <div class="pokeList">
+                        <a href="lista?id=<?= $lista['ID_Lista'] ?>" class="listLink">
                             <div class="pokemonSprite">
                                 <img src="media/pokemon/<?= $lista['ID_Pokemon'] ?>.png" width="150">
                             </div>
-                            <div class="pokemonName">
-                                <span><?= $lista['Nombre'] ?></span>
-                            </div>
+                            <?php if ($lista['Tipo_Raid'] == "Oscura"): ?>
+                                <div class="pokemonName">
+                                    <span><?= $lista['Nombre'] ?> Oscuro</span>
+                                </div>
+                            <?php elseif ($lista['Tipo_Raid'] == "Dinamax"): ?>
+                                <div class="pokemonName">
+                                    <span><?= $lista['Nombre'] ?> Dinamax</span>
+                                </div>
+                            <?php else: ?>
+                                <div class="pokemonName">
+                                    <span><?= $lista['Nombre'] ?></span>
+                                </div>
+                            <?php endif; ?>
                             <div class="placeName">
                                 <span><?= $lista['Ubicacion'] ?></span>
                             </div>
@@ -81,9 +101,11 @@ if ($db) {
                             <div class="lobbyStatus">
                                 <span><?= $lista['Participantes'] ?>/<?= $lista['Maximo_participantes'] ?> (<?= $lista['Remotos'] ?>/<?= $lista['Maximo_remotos'] ?> remotos)</span>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 <?php endforeach; ?>
+            <?php else: ?>
+                <p class="noLists">No hay listas activas. Pulsa en el botón de arriba para crear una.</p>
             <?php endif; ?>
         </article>
     </section>
