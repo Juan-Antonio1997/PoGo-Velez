@@ -22,7 +22,7 @@ if ($db) {
 
 <body>
     <header>
-        <h1 class="pageTitle">PoGo Vélez-Málaga</h1>
+        <a href="./" class="titleLink"><h1 class="pageTitle">PoGo Vélez-Málaga</h1></a>
     </header>
     <nav>
         <?php if (isset($_SESSION['usuario'])): ?>

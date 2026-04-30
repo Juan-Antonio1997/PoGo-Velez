@@ -6,6 +6,11 @@ body {
     text-align: center;
 }
 
+.titleLink {
+    text-decoration: none;
+    color: black;
+}
+
 .navList {
     list-style-type: none;
     margin: 0;
@@ -32,25 +37,4 @@ body {
 
 section {
     text-align: center;
-}
-
-.createList {
-    padding: 10px 16px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-article {
-    display: grid;
-}
-
-.listLink, .titleLink {
-    text-decoration: none;
-    color: black;
-}
-
-.pokeList {
-    border: 1px solid black;
-    width: 25%;
-    min-width: 150px;
 }

@@ -6,6 +6,11 @@ body {
     text-align: center;
 }
 
+.titleLink {
+    text-decoration: none;
+    color: black;
+}
+
 .navList {
     list-style-type: none;
     margin: 0;
