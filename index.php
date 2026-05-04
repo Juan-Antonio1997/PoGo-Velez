@@ -65,7 +65,7 @@ if ($db) {
         <?php endif; ?>
     </nav>
     <section>
-        <button class="createList"><a class="buttonLink" href="crearlista">Crear lista</a></button>
+        <a class="buttonLink" href="crearlista"><button class="createList">Crear lista</button></a>
         <article>
             <?php if (!empty($listas)): ?>
                 <?php foreach ($listas as $lista): ?>

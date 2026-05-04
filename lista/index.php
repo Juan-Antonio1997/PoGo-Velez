@@ -16,17 +16,17 @@ if ($db) {
         $hoy = date("d/m/Y");
         #Obtengo el número de participantes por lista
         $numParticipantes = db_query($db, "SELECT COUNT(Username) AS Num_Apuntados
-        FROM apuntados_lista WHERE ID_Lista = (?)", [$_GET['id']]);
+        FROM apuntados_lista WHERE ID_Lista = (?) AND Estado != (?)", [$_GET['id'], "No voy"]);
         $lista[0]['numParticipantes'] = $numParticipantes[0]['Num_Apuntados'];
         #Obtengo los invitados y los sumo
         $invitadoPresencial = db_query($db, "SELECT SUM(Invitado_presencial) AS Total_invitados_presenciales
-        FROM apuntados_lista WHERE ID_Lista = (?)", [$_GET['id']]);
+        FROM apuntados_lista WHERE ID_Lista = (?) AND Estado != (?)", [$_GET['id'], "No voy"]);
         $invitadoRemoto = db_query($db, "SELECT SUM(Invitado_remoto) AS Total_invitados_remotos
-        FROM apuntados_lista WHERE ID_Lista = (?)", [$_GET['id']]);
+        FROM apuntados_lista WHERE ID_Lista = (?) AND Estado != (?)", [$_GET['id'], "No voy"]);
         $lista[0]['numParticipantes'] = $lista[0]['numParticipantes'] + $invitadoPresencial[0]['Total_invitados_presenciales'] + $invitadoRemoto[0]['Total_invitados_remotos'];
         #Obtengo el número de apuntados remotos
         $numRemotos = db_query($db, "SELECT COUNT(Username) AS Num_Remotos
-        FROM apuntados_lista WHERE ID_Lista = (?) AND Pase = (?)", [$_GET['id'], 'Remoto']);
+        FROM apuntados_lista WHERE ID_Lista = (?) AND Pase = (?) AND Estado != (?)", [$_GET['id'], "Remoto", "No voy"]);
         $lista[0]['numRemotos'] = $numRemotos[0]['Num_Remotos'];
         #Sumo los invitados remotos
         $lista[0]['numRemotos'] = $lista[0]['numRemotos'] + $invitadoRemoto[0]['Total_invitados_remotos'];
@@ -40,11 +40,55 @@ if ($db) {
             $fechasLista['fechaInicio'] = strtotime($lista[0]['Hora_inicio']);
             $inicioLista['fecha'] = date("d/m/Y", $fechasLista['fechaInicio']);
             $inicioLista['hora'] = date("H:i", $fechasLista['fechaInicio']);
-        }
+        };
         if (isset($lista[0]['Hora_fin'])) {
             $fechasLista['fechaFin'] = strtotime($lista[0]['Hora_fin']);
             $finLista['fecha'] = date("d/m/Y", $fechasLista['fechaFin']);
             $finLista['hora'] = date("H:i", $fechasLista['fechaFin']);
+        };
+        #Creo una variable para mostrar los tipos potenciados por un tiempo como atributo title
+        if (isset($lista[0]['Tiempo_atmos'])) {
+            $descTiempo = match ($lista[0]['Tiempo_atmos']) {
+                "Soleado", "Despejado" => "Potencia a los tipos Planta, Tierra y Fuego",
+                "Parcialmente nublado (día)", "Parcialmente nublado (noche)" => "Potencia a los tipos Normal y Roca",
+                "Nublado" => "Potencia a los tipos Hada, Lucha y Veneno",
+                "Lluvia" => "Potencia a los tipos Agua, Eléctrico y Bicho",
+                "Viento" => "Potencia a los tipos Dragón, Volador y Psíquico",
+                "Niebla" => "Potencia a los tipos Fantasma y Siniestro",
+                "Nieve" => "Potencia a los tipos Hielo y Acero",
+                "Extremo" => "No potencia ningún tipo"
+            };
+            $weatherImage = match ($lista[0]['Tiempo_atmos']) {
+                "Soleado" => "Clear_Day",
+                "Despejado" => "Clear_Night",
+                "Parcialmente nublado (día)" => "Partly_Cloudy_Day",
+                "Parcialmente nublado (noche)" => "Partly_Cloudy_Night",
+                "Nublado" => "Cloudy",
+                "Lluvia" => "Rain",
+                "Viento" => "Windy",
+                "Niebla" => "Foggy",
+                "Nieve" => "Snow",
+                "Extremo" => "Extreme"
+            };
+            $apuntados = db_query($db, "SELECT a.Pase, a.Estado, u.Pogo_Username, u.Level, u.Team, a.Invitado_presencial, a.Invitado_remoto, 
+            TIME_FORMAT(a.Hora_apuntado, '%H:%i') AS Hora_apuntado, TIME_FORMAT(a.Hora_ultimo_cambio, '%H:%i') AS Hora_ultimo_cambio FROM apuntados_lista AS a
+            INNER JOIN usuarios AS u ON u.Username = a.Username
+            WHERE a.ID_Lista = (?) AND a.Estado != (?) ORDER BY Hora_apuntado", [$_GET['id'], "No voy"]);
+            $desapuntados = db_query($db, "SELECT a.Pase, a.Estado, u.Pogo_Username, u.Level, u.Team,
+            TIME_FORMAT(a.Hora_apuntado, '%H:%i') AS Hora_apuntado, TIME_FORMAT(a.Hora_ultimo_cambio, '%H:%i') AS Hora_ultimo_cambio FROM apuntados_lista AS a
+            INNER JOIN usuarios AS u ON u.Username = a.Username
+            WHERE a.ID_Lista = (?) AND a.Estado = (?) ORDER BY Hora_apuntado", [$_GET['id'], "No voy"]);
+        };
+        function iconoEstado($estado) {
+            if ($estado == "Voy") {
+                return "🚶";
+            } elseif ($estado == "Estoy") {
+                return "✅";
+            } elseif ($estado == "Llego tarde") {
+                return "🐌";
+            } else {
+                return "❌";
+            }
         }
     }
     #print_r($lista[0]);
@@ -113,17 +157,31 @@ if ($db) {
                     <?php endif; ?>
                 </div>
                 <!-- Por cambiar lo de la hora -->
-                <div class="meetTime">
-                    <span>12:15 (cierra a las 12:30)</span>
-                </div>
-                <!-- Por cambiar lo del host -->
+                <?php if (isset($inicioLista) && isset($finLista)): ?>
+                    <div class="meetTime">
+                        <span>Quedada: <?= $quedadaLista['hora'] ?> (Lista creada a las <?= $creacionLista['hora'] ?> - Hora apertura: <?= $inicioLista['hora'] ?> - Hora cierre: <?= $finLista['hora'] ?>)</span>
+                    </div>
+                <?php elseif (!isset($inicioLista) && isset($finLista)): ?>
+                    <div class="meetTime">
+                        <span>Quedada: <?= $quedadaLista['hora'] ?> (Lista creada a las <?= $creacionLista['hora'] ?> - Hora cierre: <?= $finLista['hora'] ?>)</span>
+                    </div>
+                <?php elseif (isset($inicioLista) && !isset($finLista)): ?>
+                    <div class="meetTime">
+                        <span>Quedada: <?= $quedadaLista['hora'] ?> (Lista creada a las <?= $creacionLista['hora'] ?> - Hora apertura: <?= $inicioLista['hora'] ?>)</span>
+                    </div>
+                <?php else: ?>
+                    <div class="meetTime">
+                        <span>Quedada: <?= $quedadaLista['hora'] ?> (Lista creada a las <?= $creacionLista['hora'] ?>)</span>
+                    </div>
+                <?php endif; ?>
                 <div class="listHost">
-                    <span>Host: x08Juan80x</span>
+                    <span>Host: <?= $lista[0]['Pogo_Username'] ?></span>
                 </div>
-                <!-- Por cambiar lo del tiempo -->
-                <div class="currentWeather">
-                    <span>Tiempo: <img src="../media/raids/Weather_Icon_Clear_Day.webp" alt="Soleado" title="Soleado - Potencia a los tipo Planta, Fuego y Tierra" height="50"></span>
-                </div>
+                <?php if (isset($lista[0]['Tiempo_atmos'])): ?>
+                    <div class="currentWeather">
+                        <span>Tiempo: <img src="../media/raids/Weather_Icon_<?= $weatherImage ?>.webp" alt="<?= $lista[0]['Tiempo_atmos'] ?>" title="<?= $lista[0]['Tiempo_atmos'] ?> - <?= $descTiempo ?>" height="50"></span>
+                    </div>
+                <?php endif; ?>
                 <div class="perfectPC">
                     <span>100% = <?= $lista[0]['PC_100_Nivel_20'] ?> PC (<?= $lista[0]['PC_100_Nivel_25'] ?> PC si está potenciado)</span>
                 </div>
@@ -131,13 +189,12 @@ if ($db) {
                     <span>Estadísticas base: Ataque = <?= $lista[0]['Ataque_base'] ?> / Defensa = <?= $lista[0]['Defensa_base'] ?> / PS = <?= $lista[0]['PS_base'] ?></span>
                 </div>
                 <?php if (isset($lista[0]['Enlace_counters'])): ?>
-                <div class="counterURL">
-                    <span><a href=<?= $lista[0]['Enlace_counters'] ?> target="_blank">Counters</a></span>
-                </div>
+                    <div class="counterURL">
+                        <span><a href=<?= $lista[0]['Enlace_counters'] ?> target="_blank">Counters</a></span>
+                    </div>
                 <?php endif; ?>
-                <!-- Por cambiar lo de la lista de participantes -->
                 <div class="listParticipants">
-                    <span>1/20 (0 remotos)</span>
+                    <span>Apuntados: <?= $lista[0]['numParticipantes'] ?>/<?= $lista[0]['Maximo_participantes'] ?> (<?= $lista[0]['numRemotos'] ?>/<?= $lista[0]['Maximo_remotos'] ?> remotos)</span>
                 </div>
                 <!-- Por dar funcionalidad a los botones de apuntarse -->
                 <div class="meetTime">
@@ -147,10 +204,26 @@ if ($db) {
                 <div class="meetTime">
                     <span>🚶 Voy - ✅ Estoy - 🐌 Llego Tarde - ❌ No voy</span>
                 </div>
-                <!-- Por mostrar la lista de apuntados -->
-                <div class="meetTime">
-                    <span>1) <img src="../media/raids/Regular_And_Premium_Pass.webp" height="25"> ✅ x08Juan80x - Nivel 77 - <img src="../media/website/Logo_Equipo_Valor_GO.png" height="25"></span>
-                </div>
+                <?php $ordenLista = 1 ?>
+                <?php foreach ($apuntados as $apuntado): ?>
+                    <div class="meetTime">
+                        <span><?= $ordenLista ?>) <?= $apuntado['Pase'] == "Remoto" ? "<img src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($apuntado["Estado"]) ?> <?= $apuntado['Pogo_Username'] ?> - Nivel <?= $apuntado["Level"] ?> - <img src="../media/website/Logo_Equipo_<?= $apuntado['Team'] ?>_GO.png" height="25" alt="<?= $apuntado['Team'] ?>" title="<?= $apuntado['Team'] ?>"> - Apuntado a las <?= $apuntado['Hora_apuntado'] ?></span>
+                        <?php if ($apuntado["Invitado_presencial"] > 0 && $apuntado['Invitado_remoto'] > 0): ?>
+                            <div><span>+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales + <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
+                        <?php elseif ($apuntado["Invitado_presencial"] > 0 && $apuntado['Invitado_remoto'] == 0): ?>
+                            <div><span>+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales</span></div>
+                        <?php elseif ($apuntado["Invitado_presencial"] == 0 && $apuntado['Invitado_remoto'] > 0): ?>
+                            <div><span>+ <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
+                        <?php endif; ?>
+                    </div>
+                    <?php $ordenLista = $ordenLista + 1 + $apuntado["Invitado_presencial"] + $apuntado["Invitado_remoto"]?>
+                <?php endforeach; ?>
+                <?php foreach ($desapuntados as $desapuntado): ?>
+                    <div class="meetTime">
+                        <span><?= $ordenLista ?>) <?= $desapuntado['Pase'] == "Remoto" ? "<img src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($desapuntado["Estado"]) ?> <?= $desapuntado['Pogo_Username'] ?> - Nivel <?= $desapuntado["Level"] ?> - <img src="../media/website/Logo_Equipo_<?= $desapuntado['Team'] ?>_GO.png" height="25" alt="<?= $desapuntado['Team'] ?>" title="<?= $desapuntado['Team'] ?>"> - Apuntado a las <?= $desapuntado['Hora_apuntado'] ?> - Desapuntado a las <?= $desapuntado['Hora_ultimo_cambio'] ?></span>
+                    </div>
+                    <?php $ordenLista = $ordenLista + 1?>
+                <?php endforeach; ?>
             </div>
         </article>
     </section>
