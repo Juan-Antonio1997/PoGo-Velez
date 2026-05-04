@@ -78,8 +78,14 @@ if ($db) {
             TIME_FORMAT(a.Hora_apuntado, '%H:%i') AS Hora_apuntado, TIME_FORMAT(a.Hora_ultimo_cambio, '%H:%i') AS Hora_ultimo_cambio FROM apuntados_lista AS a
             INNER JOIN usuarios AS u ON u.Username = a.Username
             WHERE a.ID_Lista = (?) AND a.Estado = (?) ORDER BY Hora_apuntado", [$_GET['id'], "No voy"]);
+            $usuarioApuntado = False;
+            $comprobacionApuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?)", [$_GET['id'], $_SESSION["usuario"]]);
+            if (!empty($comprobacionApuntado)) {
+                $usuarioApuntado = True;
+            }
         };
-        function iconoEstado($estado) {
+        function iconoEstado($estado)
+        {
             if ($estado == "Voy") {
                 return "🚶";
             } elseif ($estado == "Estoy") {
@@ -156,7 +162,6 @@ if ($db) {
                         <span>Ubicación: <?= $lista[0]['Ubicacion'] ?></span>
                     <?php endif; ?>
                 </div>
-                <!-- Por cambiar lo de la hora -->
                 <?php if (isset($inicioLista) && isset($finLista)): ?>
                     <div class="meetTime">
                         <span>Quedada: <?= $quedadaLista['hora'] ?> (Lista creada a las <?= $creacionLista['hora'] ?> - Hora apertura: <?= $inicioLista['hora'] ?> - Hora cierre: <?= $finLista['hora'] ?>)</span>
@@ -197,33 +202,61 @@ if ($db) {
                     <span>Apuntados: <?= $lista[0]['numParticipantes'] ?>/<?= $lista[0]['Maximo_participantes'] ?> (<?= $lista[0]['numRemotos'] ?>/<?= $lista[0]['Maximo_remotos'] ?> remotos)</span>
                 </div>
                 <!-- Por dar funcionalidad a los botones de apuntarse -->
-                <div class="meetTime">
-                    <span><img src="../media/raids/Regular_And_Premium_Pass.webp" height="50"> <img src="../media/raids/Remote_Raid_Pass.webp" height="50"></span>
-                </div>
+                <?php if ($usuarioApuntado): ?>
+                    <form action="editList.php" method="POST">
+                        <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                        <input type="hidden" name="Pase" value="Presencial">
+                        <input type="hidden" name="Estado" value=<?= $comprobacionApuntado[0]['Estado'] ?>>
+                        <input type="hidden" name="Invitado_presencial" value=<?= $comprobacionApuntado[0]['Invitado_presencial'] ?>>
+                        <input type="hidden" name="Invitado_remoto" value=<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>>
+                        <input type="hidden" name="Hora_apuntado" value=<?= $comprobacionApuntado[0]['Hora_apuntado'] ?>>
+                        <?= $comprobacionApuntado[0]['Pase'] == "Presencial" ? "<input type='submit' value='Ya estás apuntado como presencial' disabled>" : "<input type='submit' value='Me apunto como presencial'>" ?>
+                    </form>
+                    <form action="editList.php" method="POST">
+                        <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                        <input type="hidden" name="Pase" value="Remoto">
+                        <?= $comprobacionApuntado[0]['Pase'] == "Remoto" ? "<input type='submit' value='Ya estás apuntado como remoto' disabled>" : "<input type='submit' value='Me apunto como remoto'>" ?>
+                    </form>
+                <?php else: ?>
+                    <form action="addToList.php" method="POST">
+                        <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                        <input type="hidden" name="Pase" value="Presencial">
+                        <input type="hidden" name="Estado" value="Voy">
+                        <input type='submit' value='Me apunto como presencial'>
+                    </form>
+                    <form action="addToList.php" method="POST">
+                        <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                        <input type="hidden" name="Pase" value="Remoto">
+                        <input type="hidden" name="Estado" value="Voy">
+                        <input type='submit' value='Me apunto como remoto'>
+                    </form>
+                <?php endif;?>
                 <!-- Por dar funcionalidad a los botones de estado -->
                 <div class="meetTime">
                     <span>🚶 Voy - ✅ Estoy - 🐌 Llego Tarde - ❌ No voy</span>
                 </div>
                 <?php $ordenLista = 1 ?>
-                <?php foreach ($apuntados as $apuntado): ?>
-                    <div class="meetTime">
-                        <span><?= $ordenLista ?>) <?= $apuntado['Pase'] == "Remoto" ? "<img src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($apuntado["Estado"]) ?> <?= $apuntado['Pogo_Username'] ?> - Nivel <?= $apuntado["Level"] ?> - <img src="../media/website/Logo_Equipo_<?= $apuntado['Team'] ?>_GO.png" height="25" alt="<?= $apuntado['Team'] ?>" title="<?= $apuntado['Team'] ?>"> - Apuntado a las <?= $apuntado['Hora_apuntado'] ?></span>
-                        <?php if ($apuntado["Invitado_presencial"] > 0 && $apuntado['Invitado_remoto'] > 0): ?>
-                            <div><span>+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales + <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
-                        <?php elseif ($apuntado["Invitado_presencial"] > 0 && $apuntado['Invitado_remoto'] == 0): ?>
-                            <div><span>+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales</span></div>
-                        <?php elseif ($apuntado["Invitado_presencial"] == 0 && $apuntado['Invitado_remoto'] > 0): ?>
-                            <div><span>+ <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
-                        <?php endif; ?>
-                    </div>
-                    <?php $ordenLista = $ordenLista + 1 + $apuntado["Invitado_presencial"] + $apuntado["Invitado_remoto"]?>
-                <?php endforeach; ?>
-                <?php foreach ($desapuntados as $desapuntado): ?>
-                    <div class="meetTime">
-                        <span><?= $ordenLista ?>) <?= $desapuntado['Pase'] == "Remoto" ? "<img src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($desapuntado["Estado"]) ?> <?= $desapuntado['Pogo_Username'] ?> - Nivel <?= $desapuntado["Level"] ?> - <img src="../media/website/Logo_Equipo_<?= $desapuntado['Team'] ?>_GO.png" height="25" alt="<?= $desapuntado['Team'] ?>" title="<?= $desapuntado['Team'] ?>"> - Apuntado a las <?= $desapuntado['Hora_apuntado'] ?> - Desapuntado a las <?= $desapuntado['Hora_ultimo_cambio'] ?></span>
-                    </div>
-                    <?php $ordenLista = $ordenLista + 1?>
-                <?php endforeach; ?>
+                <div class="listJoined">
+                    <?php foreach ($apuntados as $apuntado): ?>
+                        <div class="meetTime">
+                            <span><?= $ordenLista ?>) <?= $apuntado['Pase'] == "Remoto" ? "<img src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($apuntado["Estado"]) ?> <?= $apuntado['Pogo_Username'] ?> - Nivel <?= $apuntado["Level"] ?> - <img src="../media/website/Logo_Equipo_<?= $apuntado['Team'] ?>_GO.png" height="25" alt="<?= $apuntado['Team'] ?>" title="<?= $apuntado['Team'] ?>"> - Apuntado a las <?= $apuntado['Hora_apuntado'] ?></span>
+                            <?php if ($apuntado["Invitado_presencial"] > 0 && $apuntado['Invitado_remoto'] > 0): ?>
+                                <div><span>+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales + <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
+                            <?php elseif ($apuntado["Invitado_presencial"] > 0 && $apuntado['Invitado_remoto'] == 0): ?>
+                                <div><span>+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales</span></div>
+                            <?php elseif ($apuntado["Invitado_presencial"] == 0 && $apuntado['Invitado_remoto'] > 0): ?>
+                                <div><span>+ <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
+                            <?php endif; ?>
+                        </div>
+                        <?php $ordenLista = $ordenLista + 1 + $apuntado["Invitado_presencial"] + $apuntado["Invitado_remoto"] ?>
+                    <?php endforeach; ?>
+                    <?php foreach ($desapuntados as $desapuntado): ?>
+                        <div class="meetTime">
+                            <span><?= $ordenLista ?>) <?= $desapuntado['Pase'] == "Remoto" ? "<img src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($desapuntado["Estado"]) ?> <?= $desapuntado['Pogo_Username'] ?> - Nivel <?= $desapuntado["Level"] ?> - <img src="../media/website/Logo_Equipo_<?= $desapuntado['Team'] ?>_GO.png" height="25" alt="<?= $desapuntado['Team'] ?>" title="<?= $desapuntado['Team'] ?>"> - Apuntado a las <?= $desapuntado['Hora_apuntado'] ?> - Desapuntado a las <?= $desapuntado['Hora_ultimo_cambio'] ?></span>
+                        </div>
+                        <?php $ordenLista = $ordenLista + 1 ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </article>
     </section>

@@ -3,6 +3,7 @@ require_once('../config.php');
 require_once('../db_pdo.php');
 $db = db_open();
 session_start();
+date_default_timezone_set('Europe/Madrid');
 if ($db) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $usuario = db_query($db, "SELECT * FROM usuarios WHERE LOWER(Username)=LOWER(?) OR LOWER(Email)=LOWER(?)", [$_POST['User'], $_POST['User']]);
