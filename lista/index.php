@@ -97,7 +97,7 @@ if ($db) {
             }
         }
     }
-    #print_r($lista[0]);
+    #print_r($comprobacionApuntado[0]);
 }
 ?>
 <!DOCTYPE html>
@@ -201,22 +201,44 @@ if ($db) {
                 <div class="listParticipants">
                     <span>Apuntados: <?= $lista[0]['numParticipantes'] ?>/<?= $lista[0]['Maximo_participantes'] ?> (<?= $lista[0]['numRemotos'] ?>/<?= $lista[0]['Maximo_remotos'] ?> remotos)</span>
                 </div>
-                <!-- Por dar funcionalidad a los botones de apuntarse -->
-                <?php if ($usuarioApuntado): ?>
+                <?php if ($usuarioApuntado && $lista[0]['numRemotos'] < $lista[0]['Maximo_remotos']): ?>
                     <form action="editList.php" method="POST">
                         <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
                         <input type="hidden" name="Pase" value="Presencial">
-                        <input type="hidden" name="Estado" value=<?= $comprobacionApuntado[0]['Estado'] ?>>
-                        <input type="hidden" name="Invitado_presencial" value=<?= $comprobacionApuntado[0]['Invitado_presencial'] ?>>
-                        <input type="hidden" name="Invitado_remoto" value=<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>>
-                        <input type="hidden" name="Hora_apuntado" value=<?= $comprobacionApuntado[0]['Hora_apuntado'] ?>>
+                        <input type="hidden" name="Funcion" value="modificarPase">
                         <?= $comprobacionApuntado[0]['Pase'] == "Presencial" ? "<input type='submit' value='Ya estás apuntado como presencial' disabled>" : "<input type='submit' value='Me apunto como presencial'>" ?>
                     </form>
                     <form action="editList.php" method="POST">
                         <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
                         <input type="hidden" name="Pase" value="Remoto">
+                        <input type="hidden" name="Funcion" value="modificarPase">
                         <?= $comprobacionApuntado[0]['Pase'] == "Remoto" ? "<input type='submit' value='Ya estás apuntado como remoto' disabled>" : "<input type='submit' value='Me apunto como remoto'>" ?>
                     </form>
+                <?php elseif ($usuarioApuntado && $lista[0]['numRemotos'] == $lista[0]['Maximo_remotos']): ?>
+                    <form action="editList.php" method="POST">
+                        <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                        <input type="hidden" name="Pase" value="Presencial">
+                        <input type="hidden" name="Funcion" value="modificarPase">
+                        <?= $comprobacionApuntado[0]['Pase'] == "Presencial" ? "<input type='submit' value='Ya estás apuntado como presencial' disabled>" : "<input type='submit' value='Me apunto como presencial'>" ?>
+                    </form>
+                    <form action="editList.php" method="POST">
+                        <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                        <input type="hidden" name="Pase" value="Remoto">
+                        <input type="hidden" name="Funcion" value="modificarPase">
+                        <?= $comprobacionApuntado[0]['Pase'] == "Remoto" ? "<input type='submit' value='Ya estás apuntado como remoto' disabled>" : "<input type='submit' value='Se ha alcanzado el número máximo de remotos' disabled>" ?>
+                    </form>
+                <?php elseif (!$usuarioApuntado && ($lista[0]['numParticipantes'] < $lista[0]['Maximo_participantes'] && $lista[0]['numRemotos'] == $lista[0]['Maximo_remotos'])): ?>
+                    <form action="addToList.php" method="POST">
+                        <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                        <input type="hidden" name="Pase" value="Presencial">
+                        <input type="hidden" name="Estado" value="Voy">
+                        <input type='submit' value='Me apunto como presencial'>
+                    </form>
+                    <form>
+                        <input type='submit' value='Se ha alcanzado el número máximo de remotos' disabled>
+                    </form>
+                <?php elseif (!$usuarioApuntado && $lista[0]['numParticipantes'] == $lista[0]['Maximo_participantes']): ?>
+                    <span>La lista está llena</span>
                 <?php else: ?>
                     <form action="addToList.php" method="POST">
                         <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
@@ -230,7 +252,7 @@ if ($db) {
                         <input type="hidden" name="Estado" value="Voy">
                         <input type='submit' value='Me apunto como remoto'>
                     </form>
-                <?php endif;?>
+                <?php endif; ?>
                 <!-- Por dar funcionalidad a los botones de estado -->
                 <div class="meetTime">
                     <span>🚶 Voy - ✅ Estoy - 🐌 Llego Tarde - ❌ No voy</span>
