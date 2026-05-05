@@ -8,7 +8,10 @@ if (!isset($_SESSION['usuario'])) {
     header('Location: ../login');
 }
 if ($db) {
-    $raidBosses = db_query($db, "SELECT * FROM incursiones WHERE Activo = (?)", [1]);
+    $raidBosses = db_query($db, "SELECT i.*, p.* 
+    FROM incursiones AS i 
+    INNER JOIN pokemon AS p ON p.ID_Pokemon = i.ID_Pokemon
+    WHERE Activo = (?)", [1]);
 }
 ?>
 <!DOCTYPE html>
@@ -23,7 +26,9 @@ if ($db) {
 
 <body>
     <header>
-        <a href="../" class="titleLink"><h1 class="pageTitle">PoGo Vélez-Málaga</h1></a>
+        <a href="../" class="titleLink">
+            <h1 class="pageTitle">PoGo Vélez-Málaga</h1>
+        </a>
     </header>
     <nav>
         <?php if (isset($_SESSION['usuario'])): ?>
@@ -44,10 +49,27 @@ if ($db) {
                 <div>Jefe de incursión: </div>
                 <div>
                     <?php foreach ($raidBosses as $raidBoss): ?>
-                        <label>
-                            <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
-                            <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" title="<?= $raidBoss['Tipo_Raid'] ?>" height="100">
-                        </label>
+                        <?php if ($raidBoss['Tipo_Raid'] == "Oscura"): ?>
+                            <label>
+                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
+                                <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?> Oscuro" title="<?= $raidBoss['Nombre'] ?> Oscuro" height="100">
+                            </label>
+                        <?php elseif ($raidBoss['Tipo_Raid'] == "Dinamax"): ?>
+                            <label>
+                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
+                                <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?> Dinamax" title="<?= $raidBoss['Nombre'] ?> Dinamax" height="100">
+                            </label>
+                        <?php elseif ($raidBoss['Tipo_Raid'] == "Gigamax"): ?>
+                            <label>
+                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
+                                <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?>" title="<?= $raidBoss['Nombre'] ?>" height="100">
+                            </label>
+                        <?php else: ?>
+                            <label>
+                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
+                                <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?>" title="<?= $raidBoss['Nombre'] ?>" height="100">
+                            </label>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
                 <div>

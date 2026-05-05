@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $apuntado['Hora_ultimo_cambio'] = $lista['Hora_creacion'];
             $id2 = db_insert($db, 'apuntados_lista', $apuntado);
             db_close($db);
-            header('Location: ../');
+            header("Location: ../lista/?id=" . $id);
         } else {
             print "Error";
             exit;

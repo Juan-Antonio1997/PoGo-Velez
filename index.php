@@ -71,18 +71,46 @@ if ($db) {
                 <?php foreach ($listas as $lista): ?>
                     <div class="pokeList">
                         <a href="lista?id=<?= $lista['ID_Lista'] ?>" class="listLink">
-                            <div class="pokemonSprite">
-                                <img src="media/pokemon/<?= $lista['ID_Pokemon'] ?>.png" width="150">
-                            </div>
                             <?php if ($lista['Tipo_Raid'] == "Oscura"): ?>
+                                <div class="pokemonIcon">
+                                    <img class="pokemonSprite" src="media/pokemon/<?= $lista['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista['Nombre'] ?> Oscuro" title="<?= $lista['Nombre'] ?> Oscuro">
+                                    <?php if ($lista['Shiny_activado']): ?>
+                                        <img class="shinyIcon" src="../media/raids/Shiny.png" height="30" alt="Variocolor activado" title="Variocolor activado">
+                                    <?php endif; ?>
+                                    <img class="raidTypeIcon" src="../media/raids/Shadow.webp" height="40" alt="Oscuro" title="Oscuro">
+                                </div>
                                 <div class="pokemonName">
                                     <span><?= $lista['Nombre'] ?> Oscuro</span>
                                 </div>
                             <?php elseif ($lista['Tipo_Raid'] == "Dinamax"): ?>
+                                <div class="pokemonIcon">
+                                    <img class="pokemonSprite" src="media/pokemon/<?= $lista['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista['Nombre'] ?> Dinamax" title="<?= $lista['Nombre'] ?> Dinamax">
+                                    <?php if ($lista['Shiny_activado']): ?>
+                                        <img class="shinyIcon" src="../media/raids/Shiny.png" height="30" alt="Variocolor activado" title="Variocolor activado">
+                                    <?php endif; ?>
+                                    <img class="raidTypeIcon" src="../media/raids/Dynamax.webp" height="40" alt="Dinamax" title="Dinamax">
+                                </div>
                                 <div class="pokemonName">
                                     <span><?= $lista['Nombre'] ?> Dinamax</span>
                                 </div>
+                            <?php elseif ($lista['Tipo_Raid'] == "Gigamax"): ?>
+                                <div class="pokemonIcon">
+                                    <img class="pokemonSprite" src="media/pokemon/<?= $lista['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista['Nombre'] ?>" title="<?= $lista['Nombre'] ?>">
+                                    <?php if ($lista['Shiny_activado']): ?>
+                                        <img class="shinyIcon" src="../media/raids/Shiny.png" height="30" alt="Variocolor activado" title="Variocolor activado">
+                                    <?php endif; ?>
+                                    <img class="raidTypeIcon" src="../media/raids/Gigantamax.webp" height="40" alt="Gigamax" title="Gigamax">
+                                </div>
+                                <div class="pokemonName">
+                                    <span><?= $lista['Nombre'] ?></span>
+                                </div>
                             <?php else: ?>
+                                <div class="pokemonIcon">
+                                    <img class="pokemonSprite" src="media/pokemon/<?= $lista['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista['Nombre'] ?>" title="<?= $lista['Nombre'] ?>">
+                                    <?php if ($lista['Shiny_activado']): ?>
+                                        <img class="shinyIcon" src="../media/raids/Shiny.png" height="30" alt="Variocolor activado" title="Variocolor activado">
+                                    <?php endif; ?>
+                                </div>
                                 <div class="pokemonName">
                                     <span><?= $lista['Nombre'] ?></span>
                                 </div>

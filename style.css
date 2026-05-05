@@ -43,7 +43,7 @@ section {
 article {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .listLink, .titleLink, .buttonLink {
@@ -66,4 +66,20 @@ article {
     margin-bottom: 20px;
     margin-left: 30px;
     margin-right: 30px;
+}
+
+.pokemonIcon {
+    position: relative;
+}
+
+.shinyIcon {
+    position: absolute;
+    top: 5%;
+    right: 15%;
+}
+
+.raidTypeIcon {
+    position: absolute;
+    bottom: 5%;
+    left: 10%;
 }
