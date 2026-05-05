@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['usuario'])) {
+    header('Location: ../');
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -68,6 +74,7 @@
             <input type="submit" value="Regístrame">
         </div>
     </form>
+    <a href="../login">¿Ya tienes una cuenta? Inicia sesión aquí</a>
     <script src="script.js"></script>
 </body>
 

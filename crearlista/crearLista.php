@@ -2,6 +2,11 @@
 require_once('../config.php');
 require_once('../db_pdo.php');
 session_start();
+date_default_timezone_set('Europe/Madrid');
+if (!isset($_SESSION['usuario'])) {
+    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
+    header('Location: ../login');
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lista['ID_Raid'] = $_POST['ID_Raid'];
     $lista['Creado_por'] = $_SESSION['usuario'];

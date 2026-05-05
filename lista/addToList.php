@@ -3,6 +3,10 @@ require_once('../config.php');
 require_once('../db_pdo.php');
 session_start();
 date_default_timezone_set('Europe/Madrid');
+if (!isset($_SESSION['usuario'])) {
+    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder apuntarte a una lista!";
+    header('Location: ../login');
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario['ID_Lista'] = $_POST['ID_Lista'];
     $usuario['Username'] = $_SESSION['usuario'];
@@ -15,8 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $db = db_open();
     if ($db) {
         $comprobacionApuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?)", [$usuario['ID_Lista'], $usuario['Username']]);
+        $comprobacionDesapuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?) AND Estado = (?)", [$usuario['ID_Lista'], $usuario['Username'], "No voy"]);
         if (empty($comprobacionApuntado)) {
             $id = db_insert($db, 'apuntados_lista', $usuario);
+            db_close($db);
+            header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+        } elseif (!empty($comprobacionDesapuntado)) {
+            $addBack = db_query($db, "UPDATE apuntados_lista
+            SET Pase = (?), Estado = (?), Hora_ultimo_cambio = (?)
+            WHERE ID_Lista = (?) AND Username = (?)", [$usuario['Pase'], $usuario['Estado'], $usuario['Hora_ultimo_cambio'], $usuario['ID_Lista'], $usuario['Username']]);
             db_close($db);
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         } else {

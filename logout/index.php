@@ -1,22 +1,27 @@
 <?php
 session_start();
+date_default_timezone_set('Europe/Madrid');
+
+unset($_SESSION['usuario']);
+unset($_SESSION['email']);
+unset($_SESSION['pogo_username']);
 
 $_SESSION = [];
 
-if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(
-        session_name(),
-        '',
-        time() - 60 * 60 * 24 * 365,
-        $params["path"],
-        $params["domain"],
-        $params["secure"],
-        $params["httponly"]
-    );
-}
-
-session_destroy();
+#if (ini_get("session.use_cookies")) {
+#    $params = session_get_cookie_params();
+#    setcookie(
+#        session_name(),
+#        '',
+#        time() - 60 * 60 * 24 * 365,
+#        $params["path"],
+#        $params["domain"],
+#        $params["secure"],
+#        $params["httponly"]
+#    );
+#}
+#
+#session_destroy();
 
 header('Location: ../');
 

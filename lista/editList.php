@@ -3,6 +3,10 @@ require_once('../config.php');
 require_once('../db_pdo.php');
 session_start();
 date_default_timezone_set('Europe/Madrid');
+if (!isset($_SESSION['usuario'])) {
+    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder hacer cambios en una lista!";
+    header('Location: ../login');
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario['ID_Lista'] = $_POST['ID_Lista'];
     $usuario['Username'] = $_SESSION['usuario'];
@@ -11,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario['Hora_ultimo_cambio'] = $currDate . " " . $currTime;
     $db = db_open();
     if ($db) {
-        $comprobacionApuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?)", [$usuario['ID_Lista'], $usuario['Username']]);
+        $comprobacionApuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?) AND Estado != (?)", [$usuario['ID_Lista'], $usuario['Username'], "No voy"]);
         if (!empty($comprobacionApuntado) && $_POST['Funcion'] == "modificarPase") {
             $usuario['Pase'] = $_POST['Pase'];
             $update = db_query($db, "UPDATE apuntados_lista

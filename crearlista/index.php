@@ -4,6 +4,7 @@ require_once('../db_pdo.php');
 $db = db_open();
 session_start();
 if (!isset($_SESSION['usuario'])) {
+    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
     header('Location: ../login');
 }
 if ($db) {

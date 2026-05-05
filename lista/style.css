@@ -38,3 +38,23 @@ body {
 section {
     text-align: center;
 }
+
+.desapuntadoLista {
+    text-decoration: line-through
+}
+
+.pokemonIcon {
+    position: relative;
+}
+
+#shinyIcon {
+    position: absolute;
+    top: 2%;
+    right: 42%;
+}
+
+#raidTypeIcon {
+    position: absolute;
+    bottom: 15%;
+    left: 42%;
+}

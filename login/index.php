@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['usuario'])) {
+    header('Location: ../');
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,6 +12,10 @@
     <title>Inicio de sesión - PoGO Vélez-Málaga</title>
 </head>
 <body>
+    <?php if (isset($_SESSION['advertencia'])): ?>
+        <div><?= $_SESSION['advertencia'] ?></div>
+        <?php unset($_SESSION['advertencia']) ?>
+    <?php endif; ?>
     <form action="login.php" method="POST">
         <div>
             <label>Usuario o Email</label>
@@ -17,6 +27,9 @@
         </div>
         <div>
             <input type="submit" value="Acceder">
+        </div>
+        <div>
+            <a href="../registro">¿No tienes una cuenta? Regístrate aquí</a>
         </div>
     </form>
 </body>
