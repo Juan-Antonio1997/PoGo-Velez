@@ -6,11 +6,6 @@ body {
     text-align: center;
 }
 
-.titleLink {
-    text-decoration: none;
-    color: black;
-}
-
 .navList {
     list-style-type: none;
     margin: 0;
@@ -35,27 +30,12 @@ body {
     background-color: #111111;
 }
 
+.titleLink {
+    text-decoration: none;
+    color: black;
+}
+
 section {
-    text-align: center;
-}
-
-.desapuntadoLista {
-    text-decoration: line-through
-}
-
-.pokemonIcon {
-    position: relative;
-}
-
-#shinyIcon {
-    position: absolute;
-    top: 2%;
-    right: 42%;
-    cursor: pointer;
-}
-
-#raidTypeIcon {
-    position: absolute;
-    bottom: 15%;
-    left: 42%;
+    margin-left: 30px;
+    margin-right: 20px;
 }

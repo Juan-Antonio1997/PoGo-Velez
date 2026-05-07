@@ -50,24 +50,39 @@ if ($db) {
                 <div>
                     <?php foreach ($raidBosses as $raidBoss): ?>
                         <?php if ($raidBoss['Tipo_Raid'] == "Oscura"): ?>
-                            <label>
+                            <label class="listOption">
                                 <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?> Oscuro" title="<?= $raidBoss['Nombre'] ?> Oscuro" height="100">
+                                <?php if ($raidBoss['Shiny_activado']): ?>
+                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
+                                <?php endif; ?>
+                                <img class="raidTypeIcon" src="../media/raids/Shadow.webp" height="30" alt="Oscuro" title="Oscuro">
                             </label>
                         <?php elseif ($raidBoss['Tipo_Raid'] == "Dinamax"): ?>
-                            <label>
+                            <label class="listOption">
                                 <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?> Dinamax" title="<?= $raidBoss['Nombre'] ?> Dinamax" height="100">
+                                <?php if ($raidBoss['Shiny_activado']): ?>
+                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
+                                <?php endif; ?>
+                                <img class="raidTypeIcon" src="../media/raids/Dynamax.webp" height="30" alt="Dinamax" title="Dinamax">
                             </label>
                         <?php elseif ($raidBoss['Tipo_Raid'] == "Gigamax"): ?>
-                            <label>
+                            <label class="listOption">
                                 <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?>" title="<?= $raidBoss['Nombre'] ?>" height="100">
+                                <?php if ($raidBoss['Shiny_activado']): ?>
+                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
+                                <?php endif; ?>
+                                <img class="raidTypeIcon" src="../media/raids/Gigantamax.webp" height="30" alt="Gigamax" title="Gigamax">
                             </label>
                         <?php else: ?>
-                            <label>
+                            <label class="listOption">
                                 <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?>" title="<?= $raidBoss['Nombre'] ?>" height="100">
+                                <?php if ($raidBoss['Shiny_activado']): ?>
+                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
+                                <?php endif; ?>
                             </label>
                         <?php endif; ?>
                     <?php endforeach; ?>
@@ -96,43 +111,43 @@ if ($db) {
                     <label>Tiempo atmosférico (Opcional): </label>
                 </div>
                 <div>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Soleado">
                         <img src="../media/raids/Weather_Icon_Clear_Day.webp" title="Soleado" height="50">
                     </label>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Despejado">
                         <img src="../media/raids/Weather_Icon_Clear_Night.webp" title="Despejado" height="50">
                     </label>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Parcialmente nublado (día)">
                         <img src="../media/raids/Weather_Icon_Partly_Cloudy_Day.webp" title="Parcialmente nublado (día)" height="50">
                     </label>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Parcialmente nublado (noche)">
                         <img src="../media/raids/Weather_Icon_Partly_Cloudy_Night.webp" title="Parcialmente nublado (noche)" height="50">
                     </label>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Nublado">
                         <img src="../media/raids/Weather_Icon_Cloudy.webp" title="Nublado" height="50">
                     </label>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Lluvia">
                         <img src="../media/raids/Weather_Icon_Rain.webp" title="Lluvia" height="50">
                     </label>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Viento">
                         <img src="../media/raids/Weather_Icon_Windy.webp" title="Viento" height="50">
                     </label>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Niebla">
                         <img src="../media/raids/Weather_Icon_Foggy.webp" title="Niebla" height="50">
                     </label>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Nieve">
                         <img src="../media/raids/Weather_Icon_Snow.webp" title="Nieve" height="50">
                     </label>
-                    <label>
+                    <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Extremo">
                         <img src="../media/raids/Weather_Icon_Extreme.webp" title="Extremo" height="50">
                     </label>

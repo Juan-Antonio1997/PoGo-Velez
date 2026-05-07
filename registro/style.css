@@ -6,11 +6,6 @@ body {
     text-align: center;
 }
 
-.titleLink {
-    text-decoration: none;
-    color: black;
-}
-
 .navList {
     list-style-type: none;
     margin: 0;
@@ -35,27 +30,38 @@ body {
     background-color: #111111;
 }
 
+.titleLink {
+    text-decoration: none;
+    color: black;
+}
+
 section {
-    text-align: center;
+    margin-left: 30px;
+    margin-right: 20px;
 }
 
-.desapuntadoLista {
-    text-decoration: line-through
-}
-
-.pokemonIcon {
+.teamList {
+    display: inline-block;
     position: relative;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
 }
 
-#shinyIcon {
-    position: absolute;
-    top: 2%;
-    right: 42%;
-    cursor: pointer;
+.radioImg { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-#raidTypeIcon {
-    position: absolute;
-    bottom: 15%;
-    left: 42%;
+.radioImg + img {
+  cursor: pointer;
+  outline: 2px solid #333;
+  padding: 5px;
+}
+
+.radioImg:checked + img {
+  outline: 2px solid #f00;
+  padding: 5px;
 }
