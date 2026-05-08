@@ -18,9 +18,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $comprobacionApuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?) AND Estado != (?)", [$usuario['ID_Lista'], $usuario['Username'], "No voy"]);
         if (!empty($comprobacionApuntado) && $_POST['Funcion'] == "modificarPase") {
             $usuario['Pase'] = $_POST['Pase'];
-            $update = db_query($db, "UPDATE apuntados_lista
+            $updatePass = db_query($db, "UPDATE apuntados_lista
             SET Pase = (?), Hora_ultimo_cambio = (?)
             WHERE ID_Lista = (?) AND Username = (?)", [$usuario['Pase'], $usuario['Hora_ultimo_cambio'], $usuario['ID_Lista'], $usuario['Username']]);
+            db_close($db);
+            header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+        } elseif (!empty($comprobacionApuntado) && $_POST['Funcion'] == "modificarEstado") {
+            $usuario['Estado'] = $_POST['Estado'];
+            $updateStatus = db_query($db, "UPDATE apuntados_lista
+            SET Estado = (?), Hora_ultimo_cambio = (?)
+            WHERE ID_Lista = (?) AND Username = (?)", [$usuario['Estado'], $usuario['Hora_ultimo_cambio'], $usuario['ID_Lista'], $usuario['Username']]);
             db_close($db);
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         } else {

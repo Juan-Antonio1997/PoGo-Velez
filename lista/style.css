@@ -37,10 +37,31 @@ body {
 
 section {
     text-align: center;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.apuntadosLista, .desapuntadoLista {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.teamLogo, .passIcon {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.invitadosLista {
+    display: flex;
+    align-items: center;
+    margin-top: -10px;
+    margin-left: 45px;
 }
 
 .desapuntadoLista {
-    text-decoration: line-through
+    text-decoration: line-through;
 }
 
 .pokemonIcon {
@@ -58,4 +79,16 @@ section {
     position: absolute;
     bottom: 15%;
     left: 42%;
+}
+
+.currentWeather {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.joinButtons, .statusList {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }

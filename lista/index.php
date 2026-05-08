@@ -11,7 +11,7 @@ if ($db) {
     if (isset($_GET['id'])) {
         $lista = db_query($db, "SELECT p.*, u.Username, u.Pogo_Username, l.Ubicacion, l.Enlace_Maps, 
         l.Hora_creacion, l.Hora_quedada, l.Hora_inicio, l.Hora_fin, l.Tiempo_atmos, i.Tipo_Raid,
-        i.Enlace_counters, i.Maximo_participantes, i.Maximo_remotos, i.Shiny_activado
+        i.Enlace_counters, i.Maximo_participantes, i.Maximo_remotos_totales, i.Maximo_remotos_por_apuntado, i.Shiny_activado
         FROM listas AS l
         INNER JOIN incursiones as i on l.ID_Raid = i.ID_RAID
         INNER JOIN pokemon AS p ON i.ID_Pokemon = p.ID_Pokemon
@@ -75,20 +75,20 @@ if ($db) {
                     "Nieve" => "Snow",
                     "Extremo" => "Extreme"
                 };
-                $apuntados = db_query($db, "SELECT a.Pase, a.Estado, u.Pogo_Username, u.Level, u.Team, a.Invitado_presencial, a.Invitado_remoto, 
-                TIME_FORMAT(a.Hora_apuntado, '%H:%i') AS Hora_apuntado, TIME_FORMAT(a.Hora_ultimo_cambio, '%H:%i') AS Hora_ultimo_cambio FROM apuntados_lista AS a
-                INNER JOIN usuarios AS u ON u.Username = a.Username
-                WHERE a.ID_Lista = (?) AND a.Estado != (?) ORDER BY Hora_apuntado", [$_GET['id'], "No voy"]);
-                $desapuntados = db_query($db, "SELECT a.Pase, a.Estado, u.Pogo_Username, u.Level, u.Team,
-                TIME_FORMAT(a.Hora_apuntado, '%H:%i') AS Hora_apuntado, TIME_FORMAT(a.Hora_ultimo_cambio, '%H:%i') AS Hora_ultimo_cambio FROM apuntados_lista AS a
-                INNER JOIN usuarios AS u ON u.Username = a.Username
-                WHERE a.ID_Lista = (?) AND a.Estado = (?) ORDER BY Hora_apuntado", [$_GET['id'], "No voy"]);
-                $usuarioApuntado = False;
-                $comprobacionApuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?) AND Estado != (?)", [$_GET['id'], $_SESSION["usuario"], "No voy"]);
-                if (!empty($comprobacionApuntado)) {
-                    $usuarioApuntado = True;
-                }
             };
+            $apuntados = db_query($db, "SELECT a.Pase, a.Estado, u.Pogo_Username, u.Level, u.Team, a.Invitado_presencial, a.Invitado_remoto, 
+            TIME_FORMAT(a.Hora_apuntado, '%H:%i') AS Hora_apuntado, TIME_FORMAT(a.Hora_ultimo_cambio, '%H:%i') AS Hora_ultimo_cambio FROM apuntados_lista AS a
+            INNER JOIN usuarios AS u ON u.Username = a.Username
+            WHERE a.ID_Lista = (?) AND a.Estado != (?) ORDER BY Hora_apuntado", [$_GET['id'], "No voy"]);
+            $desapuntados = db_query($db, "SELECT a.Pase, a.Estado, u.Pogo_Username, u.Level, u.Team,
+            TIME_FORMAT(a.Hora_apuntado, '%H:%i') AS Hora_apuntado, TIME_FORMAT(a.Hora_ultimo_cambio, '%H:%i') AS Hora_ultimo_cambio FROM apuntados_lista AS a
+            INNER JOIN usuarios AS u ON u.Username = a.Username
+            WHERE a.ID_Lista = (?) AND a.Estado = (?) ORDER BY Hora_apuntado", [$_GET['id'], "No voy"]);
+            $usuarioApuntado = False;
+            $comprobacionApuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?) AND Estado != (?)", [$_GET['id'], $_SESSION["usuario"], "No voy"]);
+            if (!empty($comprobacionApuntado)) {
+                $usuarioApuntado = True;
+            }
             function iconoEstado($estado)
             {
                 if ($estado == "Voy") {
@@ -98,7 +98,17 @@ if ($db) {
                 } elseif ($estado == "Llego tarde") {
                     return "🐌";
                 } else {
-                    return "❌";
+                    return "✖️";
+                }
+            }
+            $borrarLista = False;
+            $usuariosBorrarLista = db_query($db, "SELECT u.Username, p.P_BorrarListasAjenas 
+            FROM usuarios AS u
+            INNER JOIN perfiles AS p on p.ID_Perfil = u.ID_Perfil
+            WHERE p.P_BorrarListasAjenas = (?)", [1]);
+            foreach ($usuariosBorrarLista as $usuarioBorrarLista) {
+                if ($_SESSION['usuario'] == $usuarioBorrarLista['Username']) {
+                    $borrarLista = True;
                 }
             }
         }
@@ -172,7 +182,7 @@ if ($db) {
                             <img id="raidTypeIcon" src="../media/raids/Gigantamax.webp" height="40" alt="Gigamax" title="Gigamax">
                         </div>
                         <div class="pokemonName">
-                            <span><?= $lista[0]['Nombre'] ?> Dinamax</span>
+                            <span><?= $lista[0]['Nombre'] ?></span>
                         </div>
                     <?php else: ?>
                         <div class="pokemonIcon">
@@ -221,11 +231,15 @@ if ($db) {
                     </div>
                     <?php if (isset($lista[0]['Tiempo_atmos'])): ?>
                         <div class="currentWeather">
-                            <span>Tiempo: <img src="../media/raids/Weather_Icon_<?= $weatherImage ?>.webp" alt="<?= $lista[0]['Tiempo_atmos'] ?>" title="<?= $lista[0]['Tiempo_atmos'] ?> - <?= $descTiempo ?>" height="50"></span>
+                            <span>Tiempo: </span><img src="../media/raids/Weather_Icon_<?= $weatherImage ?>.webp" alt="<?= $lista[0]['Tiempo_atmos'] ?>" title="<?= $lista[0]['Tiempo_atmos'] ?> - <?= $descTiempo ?>" height="50">
                         </div>
                     <?php endif; ?>
                     <div class="perfectPC">
-                        <span>100% = <?= $lista[0]['PC_100_Nivel_20'] ?> PC (<?= $lista[0]['PC_100_Nivel_25'] ?> PC si está potenciado)</span>
+                        <?php if ($lista[0]['Tipo_Raid'] == "Dinamax" || $lista[0]['Tipo_Raid'] == "Gigamax"): ?>
+                            <span>100% = <?= $lista[0]['PC_100_Nivel_20'] ?> PC</span>
+                        <?php else: ?>
+                            <span>100% = <?= $lista[0]['PC_100_Nivel_20'] ?> PC (<?= $lista[0]['PC_100_Nivel_25'] ?> PC si está potenciado)</span>
+                        <?php endif; ?>
                     </div>
                     <div class="baseStats">
                         <span>Estadísticas base: Ataque = <?= $lista[0]['Ataque_base'] ?> / Defensa = <?= $lista[0]['Defensa_base'] ?> / PS = <?= $lista[0]['PS_base'] ?></span>
@@ -236,98 +250,117 @@ if ($db) {
                         </div>
                     <?php endif; ?>
                     <div class="listParticipants">
-                        <span>Apuntados: <?= $lista[0]['numParticipantes'] ?>/<?= $lista[0]['Maximo_participantes'] ?> (<?= $lista[0]['numRemotos'] ?>/<?= $lista[0]['Maximo_remotos'] ?> remotos)</span>
+                        <span>Apuntados: <?= $lista[0]['numParticipantes'] ?>/<?= $lista[0]['Maximo_participantes'] ?> (<?= $lista[0]['numRemotos'] ?>/<?= $lista[0]['Maximo_remotos_totales'] ?> remotos)</span>
                     </div>
-                    <?php if ($usuarioApuntado && $lista[0]['numRemotos'] < $lista[0]['Maximo_remotos']): ?>
-                        <form action="editListStatus.php" method="POST">
-                            <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
-                            <input type="hidden" name="Pase" value="Presencial">
-                            <input type="hidden" name="Funcion" value="modificarPase">
-                            <?= $comprobacionApuntado[0]['Pase'] == "Presencial" ? "<input type='submit' value='Ya estás apuntado como presencial' disabled>" : "<input type='submit' value='Me apunto como presencial'>" ?>
-                        </form>
-                        <form action="editListStatus.php" method="POST">
-                            <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
-                            <input type="hidden" name="Pase" value="Remoto">
-                            <input type="hidden" name="Funcion" value="modificarPase">
-                            <?= $comprobacionApuntado[0]['Pase'] == "Remoto" ? "<input type='submit' value='Ya estás apuntado como remoto' disabled>" : "<input type='submit' value='Me apunto como remoto'>" ?>
-                        </form>
-                    <?php elseif ($usuarioApuntado && $lista[0]['numRemotos'] == $lista[0]['Maximo_remotos']): ?>
-                        <form action="editListStatus.php" method="POST">
-                            <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
-                            <input type="hidden" name="Pase" value="Presencial">
-                            <input type="hidden" name="Funcion" value="modificarPase">
-                            <?= $comprobacionApuntado[0]['Pase'] == "Presencial" ? "<input type='submit' value='Ya estás apuntado como presencial' disabled>" : "<input type='submit' value='Me apunto como presencial'>" ?>
-                        </form>
-                        <form action="editListStatus.php" method="POST">
-                            <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
-                            <input type="hidden" name="Pase" value="Remoto">
-                            <input type="hidden" name="Funcion" value="modificarPase">
-                            <?= $comprobacionApuntado[0]['Pase'] == "Remoto" ? "<input type='submit' value='Ya estás apuntado como remoto' disabled>" : "<input type='submit' value='Se ha alcanzado el número máximo de remotos' disabled>" ?>
-                        </form>
-                    <?php elseif (!$usuarioApuntado && ($lista[0]['numParticipantes'] < $lista[0]['Maximo_participantes'] && $lista[0]['numRemotos'] == $lista[0]['Maximo_remotos'])): ?>
-                        <form action="addToList.php" method="POST">
-                            <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
-                            <input type="hidden" name="Pase" value="Presencial">
-                            <input type="hidden" name="Estado" value="Voy">
-                            <input type='submit' value='Me apunto como presencial'>
-                        </form>
-                        <form>
-                            <input type='submit' value='Se ha alcanzado el número máximo de remotos' disabled>
-                        </form>
-                    <?php elseif (!$usuarioApuntado && $lista[0]['numParticipantes'] == $lista[0]['Maximo_participantes']): ?>
-                        <span>La lista está llena</span>
-                    <?php else: ?>
-                        <form action="addToList.php" method="POST">
-                            <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
-                            <input type="hidden" name="Pase" value="Presencial">
-                            <input type="hidden" name="Estado" value="Voy">
-                            <input type='submit' value='Me apunto como presencial'>
-                        </form>
-                        <form action="addToList.php" method="POST">
-                            <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
-                            <input type="hidden" name="Pase" value="Remoto">
-                            <input type="hidden" name="Estado" value="Voy">
-                            <input type='submit' value='Me apunto como remoto'>
-                        </form>
-                    <?php endif; ?>
-                    <?php if ($usuarioApuntado && $_SESSION['usuario'] == $lista[0]['Username']): ?>
-                        <form action="deleteList.php" method="POST">
-                            <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
-                            <input type='submit' value='Borrar lista'>
-                        </form>
-                    <?php elseif ($usuarioApuntado && $_SESSION['usuario'] != $lista[0]['Username']): ?>
-                        <form action="removeFromList.php" method="POST">
-                            <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
-                            <input type='submit' value='No voy'>
-                        </form>
-                    <?php endif; ?>
-                    <!-- Por dar funcionalidad a los botones de estado -->
+                    <div class="joinButtons">
+                        <?php if ($usuarioApuntado && $lista[0]['numRemotos'] < $lista[0]['Maximo_remotos_totales']): ?>
+                            <form action="editListStatus.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Pase" value="Presencial">
+                                <input type="hidden" name="Funcion" value="modificarPase">
+                                <?= $comprobacionApuntado[0]['Pase'] == "Presencial" ? "<input type='submit' value='Ya estás apuntado como presencial' disabled>" : "<input type='submit' value='Me apunto como presencial'>" ?>
+                            </form>
+                            <form action="editListStatus.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Pase" value="Remoto">
+                                <input type="hidden" name="Funcion" value="modificarPase">
+                                <?= $comprobacionApuntado[0]['Pase'] == "Remoto" ? "<input type='submit' value='Ya estás apuntado como remoto' disabled>" : "<input type='submit' value='Me apunto como remoto'>" ?>
+                            </form>
+                        <?php elseif ($usuarioApuntado && $lista[0]['numRemotos'] == $lista[0]['Maximo_remotos_totales']): ?>
+                            <form action="editListStatus.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Pase" value="Presencial">
+                                <input type="hidden" name="Funcion" value="modificarPase">
+                                <?= $comprobacionApuntado[0]['Pase'] == "Presencial" ? "<input type='submit' value='Ya estás apuntado como presencial' disabled>" : "<input type='submit' value='Me apunto como presencial'>" ?>
+                            </form>
+                            <form action="editListStatus.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Pase" value="Remoto">
+                                <input type="hidden" name="Funcion" value="modificarPase">
+                                <?= $comprobacionApuntado[0]['Pase'] == "Remoto" ? "<input type='submit' value='Ya estás apuntado como remoto' disabled>" : "<input type='submit' value='Se ha alcanzado el número máximo de remotos' disabled>" ?>
+                            </form>
+                        <?php elseif (!$usuarioApuntado && ($lista[0]['numParticipantes'] < $lista[0]['Maximo_participantes'] && $lista[0]['numRemotos'] == $lista[0]['Maximo_remotos_totales'])): ?>
+                            <form action="addToList.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Pase" value="Presencial">
+                                <input type="hidden" name="Estado" value="Voy">
+                                <input type='submit' value='Me apunto como presencial'>
+                            </form>
+                            <form>
+                                <input type='submit' value='Se ha alcanzado el número máximo de remotos' disabled>
+                            </form>
+                        <?php elseif (!$usuarioApuntado && $lista[0]['numParticipantes'] == $lista[0]['Maximo_participantes']): ?>
+                            <span>La lista está llena</span>
+                        <?php else: ?>
+                            <form action="addToList.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Pase" value="Presencial">
+                                <input type="hidden" name="Estado" value="Voy">
+                                <input type='submit' value='Me apunto como presencial'>
+                            </form>
+                            <form action="addToList.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Pase" value="Remoto">
+                                <input type="hidden" name="Estado" value="Voy">
+                                <input type='submit' value='Me apunto como remoto'>
+                            </form>
+                        <?php endif; ?>
+                    </div>
                     <?php if ($usuarioApuntado): ?>
-                        <div class="meetTime">
-                            <span>🚶 Voy - ✅ Estoy - 🐌 Llego Tarde</span>
+                        <div class="statusList">
+                            <form action="editListStatus.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Estado" value="Voy">
+                                <input type="hidden" name="Funcion" value="modificarEstado">
+                                <?= $comprobacionApuntado[0]['Estado'] == "Voy" ? "<input type='submit' value='🚶 Voy' title='Tu estado ya es \"Voy\"' disabled>" : "<input type='submit' value='🚶 Voy' title='Cambia tu estado a \"Voy\"'>" ?>
+                            </form>
+                            <form action="editListStatus.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Estado" value="Estoy">
+                                <input type="hidden" name="Funcion" value="modificarEstado">
+                                <?= $comprobacionApuntado[0]['Estado'] == "Estoy" ? "<input type='submit' value='✅ Estoy' title='Tu estado ya es \"Estoy\"' disabled>" : "<input type='submit' value='✅ Estoy' title='Cambia tu estado a \"Estoy\"'>" ?>
+                            </form>
+                            <form action="editListStatus.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type="hidden" name="Estado" value="Llego tarde">
+                                <input type="hidden" name="Funcion" value="modificarEstado">
+                                <?= $comprobacionApuntado[0]['Estado'] == "Llego tarde" ? "<input type='submit' value='🐌 Llego tarde' title='Tu estado ya es \"Llego tarde\"' disabled>" : "<input type='submit' value='🐌 Llego tarde' title='Cambia tu estado a \"Llego tarde\"'>" ?>
+                            </form>
+                            <form action="removeFromList.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type='submit' value='✖️ No voy' title='Cambia tu estado a "No voy" (no te cuenta como apuntado, aunque aún salgas en la lista)'>
+                            </form>
                         </div>
                     <?php endif; ?>
                     <?php $ordenLista = 1 ?>
                     <div class="listJoined">
                         <?php foreach ($apuntados as $apuntado): ?>
                             <div class="meetTime">
-                                <span><?= $ordenLista ?>) <?= $apuntado['Pase'] == "Remoto" ? "<img src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($apuntado["Estado"]) ?> <?= $apuntado['Pogo_Username'] ?> - Nivel <?= $apuntado["Level"] ?> - <img src="../media/website/Logo_Equipo_<?= $apuntado['Team'] ?>_GO.png" height="25" alt="<?= $apuntado['Team'] ?>" title="<?= $apuntado['Team'] ?>"> - Apuntado a las <?= $apuntado['Hora_apuntado'] ?></span>
+                                <span class="apuntadosLista"><?= $ordenLista ?>) <?= $apuntado['Pase'] == "Remoto" ? "<img class='passIcon' src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($apuntado["Estado"]) ?> <?= $apuntado['Pogo_Username'] ?> - Nivel <?= $apuntado["Level"] ?> - <img class="teamLogo" src="../media/website/Logo_Equipo_<?= $apuntado['Team'] ?>_GO.png" height="25" alt="<?= $apuntado['Team'] ?>" title="<?= $apuntado['Team'] ?>"> - Apuntado a las <?= $apuntado['Hora_apuntado'] ?> - Último cambio a las <?= $apuntado['Hora_ultimo_cambio'] ?></span>
                                 <?php if ($apuntado["Invitado_presencial"] > 0 && $apuntado['Invitado_remoto'] > 0): ?>
-                                    <div><span>+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales + <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
+                                    <div><span class="invitadosLista">+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales + <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
                                 <?php elseif ($apuntado["Invitado_presencial"] > 0 && $apuntado['Invitado_remoto'] == 0): ?>
-                                    <div><span>+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales</span></div>
+                                    <div><span class="invitadosLista">+ <?= $apuntado['Invitado_presencial'] ?> acompañantes presenciales</span></div>
                                 <?php elseif ($apuntado["Invitado_presencial"] == 0 && $apuntado['Invitado_remoto'] > 0): ?>
-                                    <div><span>+ <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
+                                    <div><span class="invitadosLista">+ <?= $apuntado['Invitado_remoto'] ?> acompañantes remotos</span></div>
                                 <?php endif; ?>
                             </div>
                             <?php $ordenLista = $ordenLista + 1 + $apuntado["Invitado_presencial"] + $apuntado["Invitado_remoto"] ?>
                         <?php endforeach; ?>
                         <?php foreach ($desapuntados as $desapuntado): ?>
                             <div class="meetTime">
-                                <span class="desapuntadoLista"><?= $ordenLista ?>) <?= $desapuntado['Pase'] == "Remoto" ? "<img src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($desapuntado["Estado"]) ?> <?= $desapuntado['Pogo_Username'] ?> - Nivel <?= $desapuntado["Level"] ?> - <img src="../media/website/Logo_Equipo_<?= $desapuntado['Team'] ?>_GO.png" height="25" alt="<?= $desapuntado['Team'] ?>" title="<?= $desapuntado['Team'] ?>"> - Apuntado a las <?= $desapuntado['Hora_apuntado'] ?> - Desapuntado a las <?= $desapuntado['Hora_ultimo_cambio'] ?></span>
+                                <span class="desapuntadoLista"><?= $ordenLista ?>) <?= $desapuntado['Pase'] == "Remoto" ? "<img class='passIcon' src='../media/raids/Remote_Raid_Pass.webp' height=25 alt='Remoto' title='Remoto'> " : "" ?><?= iconoEstado($desapuntado["Estado"]) ?> <?= $desapuntado['Pogo_Username'] ?> - Nivel <?= $desapuntado["Level"] ?> - <img class="teamLogo" src="../media/website/Logo_Equipo_<?= $desapuntado['Team'] ?>_GO.png" height="25" alt="<?= $desapuntado['Team'] ?>" title="<?= $desapuntado['Team'] ?>"> - Apuntado a las <?= $desapuntado['Hora_apuntado'] ?> - Último cambio a las <?= $desapuntado['Hora_ultimo_cambio'] ?></span>
                             </div>
                             <?php $ordenLista = $ordenLista + 1 ?>
                         <?php endforeach; ?>
+                    </div>
+                    <div>
+                        <?php if ($_SESSION['usuario'] == $lista[0]['Username'] || $borrarLista): ?>
+                            <form action="deleteList.php" method="POST">
+                                <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
+                                <input type='submit' value='Borrar lista' title="Borra esta lista (Nota: No se puede deshacer)">
+                            </form>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php else: ?>
@@ -350,7 +383,7 @@ if ($db) {
                 pokemonSprite.src = "../media/pokemon/<?= $lista[0]['ID_Pokemon'] ?>-shiny.png";
                 shinyIcon.src = "../media/raids/Shiny.png";
                 shinyIcon.alt = "Variocolor";
-                shinyIcon.title="Pulsa para ocultar el variocolor"
+                shinyIcon.title = "Pulsa para ocultar el variocolor"
                 <?php if ($lista[0]['Tipo_Raid'] == "Oscura"): ?>
                     pokemonSprite.alt = "<?= $lista[0]['Nombre'] ?> Oscuro variocolor";
                     pokemonSprite.title = "<?= $lista[0]['Nombre'] ?> Oscuro variocolor";
