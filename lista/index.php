@@ -307,6 +307,26 @@ if ($db) {
                         <?php endif; ?>
                     </div>
                     <?php if ($usuarioApuntado): ?>
+                        <div class="guestManagement">
+                            <details>
+                                <summary>Añadir o quitar invitados presenciales: </summary>
+                                <form>
+                                    <label>Invitados presenciales: </label>
+                                    <input type="number" name="Invitado_presencial" value="<?= $comprobacionApuntado[0]['Invitado_presencial'] ?>" min=0 max=<?= ($lista[0]['Maximo_participantes'] - $lista[0]['numParticipantes']) + $comprobacionApuntado[0]['Invitado_presencial'] ?> required>
+                                    <input type=submit>
+                                </form>
+                            </details>
+                            <details>
+                                <summary>Añadir o quitar invitados remotos: </summary>
+                                <form>
+                                    <label>Invitados remotos: </label>
+                                    <!--?php if ($lista[0]['Maximo_remotos_totales']): ?-->
+                                        <input type="number" name="Invitado_remoto" value="<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>" min=0 max=<?= ($lista[0]['Maximo_remotos_totales'] - $lista[0]['numRemotos']) + $comprobacionApuntado[0]['Invitado_remoto'] ?> required>
+                                    <!--?php endif; ?-->
+                                    <input type=submit>
+                                </form>
+                            </details>
+                        </div>
                         <div class="statusList">
                             <form action="editListStatus.php" method="POST">
                                 <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
