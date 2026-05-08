@@ -239,26 +239,26 @@ if ($db) {
                         <span>Apuntados: <?= $lista[0]['numParticipantes'] ?>/<?= $lista[0]['Maximo_participantes'] ?> (<?= $lista[0]['numRemotos'] ?>/<?= $lista[0]['Maximo_remotos'] ?> remotos)</span>
                     </div>
                     <?php if ($usuarioApuntado && $lista[0]['numRemotos'] < $lista[0]['Maximo_remotos']): ?>
-                        <form action="editList.php" method="POST">
+                        <form action="editListStatus.php" method="POST">
                             <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
                             <input type="hidden" name="Pase" value="Presencial">
                             <input type="hidden" name="Funcion" value="modificarPase">
                             <?= $comprobacionApuntado[0]['Pase'] == "Presencial" ? "<input type='submit' value='Ya estás apuntado como presencial' disabled>" : "<input type='submit' value='Me apunto como presencial'>" ?>
                         </form>
-                        <form action="editList.php" method="POST">
+                        <form action="editListStatus.php" method="POST">
                             <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
                             <input type="hidden" name="Pase" value="Remoto">
                             <input type="hidden" name="Funcion" value="modificarPase">
                             <?= $comprobacionApuntado[0]['Pase'] == "Remoto" ? "<input type='submit' value='Ya estás apuntado como remoto' disabled>" : "<input type='submit' value='Me apunto como remoto'>" ?>
                         </form>
                     <?php elseif ($usuarioApuntado && $lista[0]['numRemotos'] == $lista[0]['Maximo_remotos']): ?>
-                        <form action="editList.php" method="POST">
+                        <form action="editListStatus.php" method="POST">
                             <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
                             <input type="hidden" name="Pase" value="Presencial">
                             <input type="hidden" name="Funcion" value="modificarPase">
                             <?= $comprobacionApuntado[0]['Pase'] == "Presencial" ? "<input type='submit' value='Ya estás apuntado como presencial' disabled>" : "<input type='submit' value='Me apunto como presencial'>" ?>
                         </form>
-                        <form action="editList.php" method="POST">
+                        <form action="editListStatus.php" method="POST">
                             <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
                             <input type="hidden" name="Pase" value="Remoto">
                             <input type="hidden" name="Funcion" value="modificarPase">

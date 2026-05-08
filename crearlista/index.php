@@ -46,12 +46,12 @@ if ($db) {
     <section>
         <article>
             <form action="crearLista.php" method="POST">
-                <div>Jefe de incursión: </div>
-                <div>
+                <div>Jefe de incursión: <span id="bossName"></span></div>
+                <div id="bossSelection">
                     <?php foreach ($raidBosses as $raidBoss): ?>
                         <?php if ($raidBoss['Tipo_Raid'] == "Oscura"): ?>
                             <label class="listOption">
-                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
+                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" title="<?= $raidBoss['Nombre'] ?> Oscuro" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?> Oscuro" title="<?= $raidBoss['Nombre'] ?> Oscuro" height="100">
                                 <?php if ($raidBoss['Shiny_activado']): ?>
                                     <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
@@ -60,7 +60,7 @@ if ($db) {
                             </label>
                         <?php elseif ($raidBoss['Tipo_Raid'] == "Dinamax"): ?>
                             <label class="listOption">
-                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
+                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" title="<?= $raidBoss['Nombre'] ?> Dinamax" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?> Dinamax" title="<?= $raidBoss['Nombre'] ?> Dinamax" height="100">
                                 <?php if ($raidBoss['Shiny_activado']): ?>
                                     <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
@@ -69,7 +69,7 @@ if ($db) {
                             </label>
                         <?php elseif ($raidBoss['Tipo_Raid'] == "Gigamax"): ?>
                             <label class="listOption">
-                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
+                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" title="<?= $raidBoss['Nombre'] ?>" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?>" title="<?= $raidBoss['Nombre'] ?>" height="100">
                                 <?php if ($raidBoss['Shiny_activado']): ?>
                                     <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
@@ -78,7 +78,7 @@ if ($db) {
                             </label>
                         <?php else: ?>
                             <label class="listOption">
-                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" required>
+                                <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" title="<?= $raidBoss['Nombre'] ?>" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?>" title="<?= $raidBoss['Nombre'] ?>" height="100">
                                 <?php if ($raidBoss['Shiny_activado']): ?>
                                     <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
@@ -108,9 +108,9 @@ if ($db) {
                     <input type="time" name="Hora_fin">
                 </div>
                 <div>
-                    <label>Tiempo atmosférico (Opcional): </label>
+                    <label>Tiempo atmosférico (Opcional): <span id="weatherName"></span></label>
                 </div>
-                <div>
+                <div id="weatherSelection">
                     <label class="weatherList">
                         <input type="radio" class="radioImg" name="Tiempo_atmos" value="Soleado">
                         <img src="../media/raids/Weather_Icon_Clear_Day.webp" title="Soleado" height="50">
@@ -174,6 +174,7 @@ if ($db) {
     <footer>
 
     </footer>
+    <script src="script.js"></script>
 </body>
 
 </html>

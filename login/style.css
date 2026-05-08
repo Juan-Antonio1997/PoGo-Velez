@@ -14,16 +14,21 @@ body {
     background-color: #333333;
 }
 
-.navElement {
+.navElement, .navSelected {
     float: right;
 }
 
-.navElement a, .navElement span {
+.navElement a, .navElement span, .navSelected span {
     display: block;
     color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+}
+
+.navSelected {
+    background-color: #111111;
+    cursor: default;
 }
 
 .navElement a:hover {
@@ -38,4 +43,12 @@ body {
 section {
     margin-left: 30px;
     margin-right: 20px;
+}
+
+form {
+    margin-top: 10px;
+}
+
+.registerLink {
+    color: #0000FF
 }

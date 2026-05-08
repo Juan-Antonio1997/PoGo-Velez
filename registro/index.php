@@ -19,6 +19,12 @@ if (isset($_SESSION['usuario'])) {
         <a href="../" class="titleLink">
             <h1 class="pageTitle">PoGo Vélez-Málaga</h1>
         </a>
+        <nav>
+            <ul class="navList">
+                <li class="navSelected"><span>Regístrate</span></li>
+                <li class="navElement"><a href="../login">Iniciar sesión</a></li>
+            </ul>
+        </nav>
     </header>
     <section>
         <form action="registro.php" method="POST" id="RegistroGoVelez" onsubmit="return register()">
@@ -50,8 +56,8 @@ if (isset($_SESSION['usuario'])) {
                 <label>Nivel</label>
                 <input type="number" name="Level" placeholder="1-80" title="El nivel es: Mínimo 1 - Máximo: 80" min=1 max=80 required>
             </div>
-            <div>
-                <label>Equipo:</label><br>
+            <div id="teamSelection">
+                <label>Equipo: <span id="teamName"></span></label><br>
                 <input type="hidden" id="Sin_equipo" name="Team" value="Sin equipo">
                 <label for="Instinto" class="teamList">
                     <input type="radio" class="radioImg" id="Instinto" name="Team" value="Instinto" required>
@@ -76,7 +82,7 @@ if (isset($_SESSION['usuario'])) {
                 <input type="submit" value="Regístrame">
             </div>
         </form>
-        <a href="../login">¿Ya tienes una cuenta? Inicia sesión aquí</a>
+        <a class="loginLink" href="../login">¿Ya tienes una cuenta? Inicia sesión aquí</a>
     </section>
     <script src="script.js"></script>
 </body>
