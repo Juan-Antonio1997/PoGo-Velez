@@ -75,11 +75,18 @@ article {
 .shinyIcon {
     position: absolute;
     top: 5%;
-    right: 15%;
+    left: 5%;
 }
 
-.raidTypeIcon {
+.shadowIcon {
     position: absolute;
     bottom: 5%;
-    left: 10%;
+    left: 0%;
+}
+
+.maxIcon {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    z-index: -1;
 }

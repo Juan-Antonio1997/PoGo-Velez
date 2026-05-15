@@ -54,34 +54,34 @@ if ($db) {
                                 <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" title="<?= $raidBoss['Nombre'] ?> Oscuro" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?> Oscuro" title="<?= $raidBoss['Nombre'] ?> Oscuro" height="100">
                                 <?php if ($raidBoss['Shiny_activado']): ?>
-                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
+                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="40" alt="Variocolor activado" title="Variocolor activado">
                                 <?php endif; ?>
-                                <img class="raidTypeIcon" src="../media/raids/Shadow.webp" height="30" alt="Oscuro" title="Oscuro">
+                                <img class="shadowIcon" src="../media/raids/Shadow.webp" height="40" alt="Oscuro" title="Oscuro">
                             </label>
                         <?php elseif ($raidBoss['Tipo_Raid'] == "Dinamax"): ?>
                             <label class="listOption">
                                 <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" title="<?= $raidBoss['Nombre'] ?> Dinamax" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?> Dinamax" title="<?= $raidBoss['Nombre'] ?> Dinamax" height="100">
                                 <?php if ($raidBoss['Shiny_activado']): ?>
-                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
+                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="40" alt="Variocolor activado" title="Variocolor activado">
                                 <?php endif; ?>
-                                <img class="raidTypeIcon" src="../media/raids/Dynamax.webp" height="30" alt="Dinamax" title="Dinamax">
+                                <img class="maxIcon" src="../media/raids/Dynamax.webp" height="60" alt="Dinamax" title="Dinamax">
                             </label>
                         <?php elseif ($raidBoss['Tipo_Raid'] == "Gigamax"): ?>
                             <label class="listOption">
                                 <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" title="<?= $raidBoss['Nombre'] ?>" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?>" title="<?= $raidBoss['Nombre'] ?>" height="100">
                                 <?php if ($raidBoss['Shiny_activado']): ?>
-                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
+                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="40" alt="Variocolor activado" title="Variocolor activado">
                                 <?php endif; ?>
-                                <img class="raidTypeIcon" src="../media/raids/Gigantamax.webp" height="30" alt="Gigamax" title="Gigamax">
+                                <img class="maxIcon" src="../media/raids/Gigantamax.webp" height="60" alt="Gigamax" title="Gigamax">
                             </label>
                         <?php else: ?>
                             <label class="listOption">
                                 <input type="radio" class="radioImg" name="ID_Raid" value="<?= $raidBoss['ID_Raid'] ?>" title="<?= $raidBoss['Nombre'] ?>" required>
                                 <img src="../media/pokemon/<?= $raidBoss['ID_Pokemon'] ?>.png" alt="<?= $raidBoss['Nombre'] ?>" title="<?= $raidBoss['Nombre'] ?>" height="100">
                                 <?php if ($raidBoss['Shiny_activado']): ?>
-                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="20" alt="Variocolor activado" title="Variocolor activado">
+                                    <img class="shinyIcon" src="../media/raids/Shiny.png" height="40" alt="Variocolor activado" title="Variocolor activado">
                                 <?php endif; ?>
                             </label>
                         <?php endif; ?>

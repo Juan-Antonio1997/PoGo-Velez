@@ -38,8 +38,8 @@ body {
 .listOption {
     display: inline-block;
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     margin: 5px;
 }
 
@@ -59,18 +59,32 @@ body {
   outline: 2px solid #f00;
 }
 
+.listOption .radioImg + img {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+}
+
 .shinyIcon {
     position: absolute;
     top: 2px;
-    right: 2px;
+    left: 2px;
     cursor: pointer;
 }
 
-.raidTypeIcon {
+.shadowIcon {
     position: absolute;
     bottom: 2px;
     left: 2px;
     cursor: pointer;
+}
+
+.maxIcon {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    cursor: pointer;
+    z-index: -1;
 }
 
 section {

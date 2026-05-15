@@ -155,9 +155,9 @@ if ($db) {
                         <div class="pokemonIcon">
                             <img id="pokemonSprite" src="../media/pokemon/<?= $lista[0]['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista[0]['Nombre'] ?> Oscuro" title="<?= $lista[0]['Nombre'] ?> Oscuro">
                             <?php if ($lista[0]['Shiny_activado']): ?>
-                                <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="30" alt="No variocolor" title="Pulsa para mostrar el variocolor">
+                                <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="60" alt="No variocolor" title="Pulsa para mostrar el variocolor">
                             <?php endif; ?>
-                            <img id="raidTypeIcon" src="../media/raids/Shadow.webp" height="40" alt="Oscuro" title="Oscuro">
+                            <img id="shadowIcon" src="../media/raids/Shadow.webp" height="60" alt="Oscuro" title="Oscuro">
                         </div>
                         <div class="pokemonName">
                             <span><?= $lista[0]['Nombre'] ?> Oscuro</span>
@@ -166,9 +166,9 @@ if ($db) {
                         <div class="pokemonIcon">
                             <img id="pokemonSprite" src="../media/pokemon/<?= $lista[0]['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista[0]['Nombre'] ?> Dinamax" title="<?= $lista[0]['Nombre'] ?> Dinamax">
                             <?php if ($lista[0]['Shiny_activado']): ?>
-                                <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="30" alt="No variocolor" title="Pulsa para mostrar el variocolor">
+                                <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="60" alt="No variocolor" title="Pulsa para mostrar el variocolor">
                             <?php endif; ?>
-                            <img id="raidTypeIcon" src="../media/raids/Dynamax.webp" height="40" alt="Dinamax" title="Dinamax">
+                            <img id="maxIcon" src="../media/raids/Dynamax.webp" height="90" alt="Dinamax" title="Dinamax">
                         </div>
                         <div class="pokemonName">
                             <span><?= $lista[0]['Nombre'] ?> Dinamax</span>
@@ -177,9 +177,9 @@ if ($db) {
                         <div class="pokemonIcon">
                             <img id="pokemonSprite" src="../media/pokemon/<?= $lista[0]['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista[0]['Nombre'] ?>" title="<?= $lista[0]['Nombre'] ?>">
                             <?php if ($lista[0]['Shiny_activado']): ?>
-                                <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="30" alt="No variocolor" title="Pulsa para mostrar el variocolor">
+                                <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="60" alt="No variocolor" title="Pulsa para mostrar el variocolor">
                             <?php endif; ?>
-                            <img id="raidTypeIcon" src="../media/raids/Gigantamax.webp" height="40" alt="Gigamax" title="Gigamax">
+                            <img id="maxIcon" src="../media/raids/Gigantamax.webp" height="90" alt="Gigamax" title="Gigamax">
                         </div>
                         <div class="pokemonName">
                             <span><?= $lista[0]['Nombre'] ?></span>
@@ -188,7 +188,7 @@ if ($db) {
                         <div class="pokemonIcon">
                             <img id="pokemonSprite" src="../media/pokemon/<?= $lista[0]['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista[0]['Nombre'] ?>" title="<?= $lista[0]['Nombre'] ?>">
                             <?php if ($lista[0]['Shiny_activado']): ?>
-                                <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="30" alt="No variocolor" title="Pulsa para mostrar el variocolor">
+                                <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="60" alt="No variocolor" title="Pulsa para mostrar el variocolor">
                             <?php endif; ?>
                         </div>
                         <div class="pokemonName">

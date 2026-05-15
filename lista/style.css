@@ -70,15 +70,22 @@ section {
 
 #shinyIcon {
     position: absolute;
-    top: 2%;
-    right: 42%;
+    top: 0%;
+    left: 40%;
     cursor: pointer;
 }
 
-#raidTypeIcon {
+#shadowIcon {
     position: absolute;
-    bottom: 15%;
-    left: 42%;
+    bottom: 10%;
+    left: 38%;
+}
+
+#maxIcon {
+    position: absolute;
+    top: 0%;
+    right: 38%;
+    z-index: -1;
 }
 
 .currentWeather {
