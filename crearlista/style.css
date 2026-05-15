@@ -52,11 +52,11 @@ body {
 
 .radioImg + img {
   cursor: pointer;
-  outline: 2px solid #333;
+  outline: 2px solid #8f8f9d;
 }
 
 .radioImg:checked + img {
-  outline: 2px solid #f00;
+  outline: 2px solid #ff0000;
 }
 
 .listOption .radioImg + img {
