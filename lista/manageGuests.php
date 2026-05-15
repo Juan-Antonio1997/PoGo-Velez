@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         } elseif (!empty($comprobacionApuntado) && $_POST['Tipo_Invitado'] == "Remoto") {
             $usuario['Invitado_remoto'] = $_POST['Invitado_remoto'];
-            if ($lista[0]['numRemotos'] - $comprobacionApuntado[0]['Invitado_remoto'] + $_POST['Invitado_remoto'] <= $lista[0]['Maximo_remotos_totales'] && $_POST['Invitado_remoto'] <= $lista[0]['Maximo_remotos_por_apuntado']) {
+            if ($lista[0]['numParticipantes'] - $comprobacionApuntado[0]['Invitado_remoto'] + $_POST['Invitado_remoto'] <= $lista[0]['Maximo_participantes'] && $lista[0]['numRemotos'] - $comprobacionApuntado[0]['Invitado_remoto'] + $_POST['Invitado_remoto'] <= $lista[0]['Maximo_remotos_totales'] && $_POST['Invitado_remoto'] <= $lista[0]['Maximo_remotos_por_apuntado']) {
                 $updateInvitadoRemoto = db_query($db, "UPDATE apuntados_lista
                 SET Invitado_remoto = (?), Hora_ultimo_cambio = (?)
                 WHERE ID_Lista = (?) AND Username = (?)", [$usuario['Invitado_remoto'], $usuario['Hora_ultimo_cambio'], $usuario['ID_Lista'], $usuario['Username']]);

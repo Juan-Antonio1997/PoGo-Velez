@@ -323,12 +323,18 @@ if ($db) {
                                 <summary>Añadir o quitar invitados remotos: </summary>
                                 <form action="manageGuests.php" method="POST">
                                     <label>Invitados remotos: </label>
-                                    <?php if ($lista[0]['Maximo_remotos_totales'] > $lista[0]['Maximo_remotos_por_apuntado'] && $lista[0]['Maximo_remotos_totales'] - $lista[0]['numParticipantes'] + $comprobacionApuntado[0]['Invitado_remoto'] < $lista[0]['Maximo_remotos_por_apuntado']): ?>
-                                        <input type="number" name="Invitado_remoto" value="<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>" min=0 max=<?= ($lista[0]['Maximo_remotos_totales'] - $lista[0]['numParticipantes']) + $comprobacionApuntado[0]['Invitado_remoto'] ?> required>
-                                    <?php elseif($lista[0]['Maximo_participantes'] - $lista[0]['numParticipantes'] < $lista[0]['Maximo_remotos_totales']): ?>
-                                        <input type="number" name="Invitado_remoto" value="<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>" min=0 max=<?= ($lista[0]['Maximo_participantes'] - $lista[0]['numParticipantes']) + $comprobacionApuntado[0]['Invitado_remoto'] ?> required>
+                                    <?php if ($lista[0]['Maximo_remotos_totales'] > $lista[0]['Maximo_remotos_por_apuntado']): ?>
+                                        <?php if ((($lista[0]['Maximo_participantes'] - $lista[0]['numParticipantes']) + $comprobacionApuntado[0]['Invitado_remoto']) < $lista[0]['Maximo_remotos_por_apuntado']): ?>
+                                            <input type="number" name="Invitado_remoto" value="<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>" min=0 max=<?= ($lista[0]['Maximo_participantes'] - $lista[0]['numParticipantes']) + $comprobacionApuntado[0]['Invitado_remoto'] ?> required>
+                                        <?php else: ?>
+                                            <input type="number" name="Invitado_remoto" value="<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>" min=0 max=<?= $lista[0]['Maximo_remotos_por_apuntado'] ?> required>
+                                        <?php endif; ?>
                                     <?php else: ?>
-                                        <input type="number" name="Invitado_remoto" value="<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>" min=0 max=<?= ($lista[0]['Maximo_remotos_por_apuntado']) - $lista[0]['numRemotos'] + $comprobacionApuntado[0]['Invitado_remoto'] ?> required>
+                                        <?php if ($lista[0]['Maximo_participantes'] - ($lista[0]['numParticipantes'] - $lista[0]['numRemotos']) < $lista[0]['Maximo_remotos_totales']): ?>
+                                            <input type="number" name="Invitado_remoto" value="<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>" min=0 max=<?= ($lista[0]['Maximo_participantes'] - $lista[0]['numParticipantes']) + $comprobacionApuntado[0]['Invitado_remoto'] ?> required>
+                                        <?php else: ?>
+                                            <input type="number" name="Invitado_remoto" value="<?= $comprobacionApuntado[0]['Invitado_remoto'] ?>" min=0 max=<?= ($lista[0]['Maximo_remotos_totales'] - $lista[0]['numRemotos']) + $comprobacionApuntado[0]['Invitado_remoto'] ?> required>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                     <input type="hidden" name="ID_Lista" value="<?= $_GET['id'] ?>">
                                     <input type="hidden" name="Tipo_Invitado" value="Remoto">
