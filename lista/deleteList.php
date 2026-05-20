@@ -17,18 +17,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($lista[0]['Creado_por'] == $usuario['Username']) {
             $comprobacionCreador = True;
         }
-        if ($comprobacionCreador) {;
+        $borrarLista = False;
+        $usuariosBorrarLista = db_query($db, "SELECT u.Username, p.P_BorrarListasAjenas 
+        FROM usuarios AS u
+        INNER JOIN perfiles AS p on p.ID_Perfil = u.ID_Perfil
+        WHERE p.P_BorrarListasAjenas = (?)", [1]);
+        foreach ($usuariosBorrarLista as $usuarioBorrarLista) {
+            if ($usuario['Username'] == $usuarioBorrarLista['Username']) {
+                $borrarLista = True;
+            }
+        }
+        if ($comprobacionCreador || $borrarLista) {;
             $removeParticipants = db_query($db, "DELETE FROM apuntados_lista
             WHERE ID_Lista = (?)", [$usuario['ID_Lista']]);
             $deleteList = db_delete_by_id($db, 'listas', $usuario['ID_Lista'], "ID_Lista");
             db_close($db);
+            $_SESSION['deletedList'] = "Se ha borrado la lista con ID " . $usuario['ID_Lista'] . " con éxito";
             header("Location: ../");
         } else {
-            print "Error";
+            $_SESSION['deleteListError'] = "Se ha producido un error al intentar borrar esta lista. Por favor, inténtalo más tarde.";
+            header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             exit;
         }
     } else {
-        print "Se ha producido un error de conexión";
+        $_SESSION['deleteListError'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta borrar esta lista más tarde.";
+        header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         exit;
     }
 }

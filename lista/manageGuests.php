@@ -45,7 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 db_close($db);
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             } else {
-                print "Error presencial";
+                $_SESSION['manageGuestsError'] = "Ha ocurrido un error al intentar añadir invitados presenciales: El número de participantes totales habría excedido el máximo permitido si se hubiesen añadido esos invitados";
+                header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             }
         } elseif (!empty($comprobacionApuntado) && $_POST['Tipo_Invitado'] == "Remoto") {
             $usuario['Invitado_remoto'] = $_POST['Invitado_remoto'];
@@ -56,14 +57,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 db_close($db);
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             } else {
-                print "Error remoto";
+                $_SESSION['manageGuestsError'] = "Ha ocurrido un error al intentar añadir invitados remotos: El número de participantes remotos totales habría excedido el máximo permitido si se hubiesen añadido esos invitados";
+                header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             }
         } else {
-            print "Error";
+            $_SESSION['manageGuestsError'] = "SE ha producido un error al intentar cambiar el número de invitados: Inténtalo de nuevo más tarde";
+            header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             exit;
         }
     } else {
-        print "Se ha producido un error de conexión";
+        $_SESSION['manageGuestsError'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta cambiar el número de personas que vas a invitar a esta lista más tarde.";
+        header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         exit;
     }
 }

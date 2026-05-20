@@ -31,6 +31,14 @@ if (isset($_SESSION['usuario'])) {
             <div><?= $_SESSION['advertencia'] ?></div>
             <?php unset($_SESSION['advertencia']) ?>
         <?php endif; ?>
+        <?php if (isset($_SESSION['db_error'])): ?>
+            <div><?= $_SESSION['db_error'] ?></div>
+            <?php unset($_SESSION['db_error']) ?>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['loginIncorrecto'])): ?>
+            <div><?= $_SESSION['loginIncorrecto'] ?></div>
+            <?php unset($_SESSION['loginIncorrecto']) ?>
+        <?php endif; ?>
         <form action="login.php" method="POST">
             <div>
                 <label>Usuario o Email: </label>

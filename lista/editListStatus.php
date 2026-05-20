@@ -31,11 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             db_close($db);
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         } else {
-            print "Error";
+            $_SESSION['editListStatusError'] = "Se ha producido un error al intentar cambiar tu estado en esta lista. Por favor, inténtalo de nuevo más tarde.";
+            header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             exit;
         }
     } else {
-        print "Se ha producido un error de conexión";
+        $_SESSION['editListStatusError'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta editar tu estado en esta lista más tarde.";
+        header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         exit;
     }
 }

@@ -16,21 +16,25 @@ if ($db) {
                 $_SESSION['usuario'] = $username;
                 $_SESSION['email'] = $email;
                 $_SESSION['pogo_username'] = $pogo_username;
+                $_SESSION['login'] = "¡Bienvenid@, " . $username . "!";
                 header('Location: ../');
                 exit;
             } else {
-                print 'Usuario, email o contraseña incorrecto';
+                $_SESSION['loginIncorrecto'] = 'Usuario, email o contraseña incorrecto';
+                header('Location: ../login');
                 exit;
             }
         } else {
-            print 'Usuario, email o contraseña incorrecto';
+            $_SESSION['loginIncorrecto'] = 'Usuario, email o contraseña incorrecto';
+            header('Location: ../login');
             exit;
         }
     } else {
-        header('Location: index.php');
+        header('Location: ../login');
         exit;
     }
 } else {
-    print "Se ha producido un error de conexión";
+    $_SESSION['db_error'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta iniciar sesión más tarde.";
+    header('Location: ../login');
     exit;
 }

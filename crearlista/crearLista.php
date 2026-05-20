@@ -42,12 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id2 = db_insert($db, 'apuntados_lista', $apuntado);
             db_close($db);
             header("Location: ../lista/?id=" . $id);
+            exit;
         } else {
-            print "Error";
+            $_SESSION['crearListaError'] = "Se ha producido un error al crear la lista. Por favor, inténtalo de nuevo más tarde.";
+            header("Location: ../crearlista");
             exit;
         }
     } else {
-        print "Se ha producido un error de conexión";
+        $_SESSION['db_error'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta crear la lista más tarde.";
+        header("Location: ../crearlista");
         exit;
     }
 }

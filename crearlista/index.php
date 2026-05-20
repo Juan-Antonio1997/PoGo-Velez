@@ -45,6 +45,14 @@ if ($db) {
     </nav>
     <section>
         <article>
+            <?php if (isset($_SESSION['db_error'])): ?>
+                <div><?= $_SESSION['db_error'] ?></div>
+                <?php unset($_SESSION['db_error']) ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['crearListaError'])): ?>
+                <div><?= $_SESSION['crearListaError'] ?></div>
+                <?php unset($_SESSION['crearListaError']) ?>
+            <?php endif; ?>
             <form action="crearLista.php" method="POST">
                 <div>Jefe de incursión: <span id="bossName"></span></div>
                 <div id="bossSelection">

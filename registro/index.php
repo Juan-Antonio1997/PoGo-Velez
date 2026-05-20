@@ -28,14 +28,26 @@ if (isset($_SESSION['usuario'])) {
     </header>
     <section>
         <form action="registro.php" method="POST" id="RegistroGoVelez" onsubmit="return register()">
+            <?php if (isset($_SESSION['usernameError'])): ?>
+                <div><?= $_SESSION['usernameError'] ?></div>
+                <?php unset($_SESSION['usernameError']) ?>
+            <?php endif; ?>
             <div>
                 <label>Usuario: </label>
                 <input type="text" name="Username" placeholder="Usuario" maxlength="20" required>
             </div>
+            <?php if (isset($_SESSION['emailError'])): ?>
+                <div><?= $_SESSION['emailError'] ?></div>
+                <?php unset($_SESSION['emailError']) ?>
+            <?php endif; ?>
             <div>
                 <label>Email: </label>
                 <input type="email" name="Email" placeholder="Email" maxlength="100" required>
             </div>
+            <?php if (isset($_SESSION['passwordError'])): ?>
+                <div><?= $_SESSION['passwordError'] ?></div>
+                <?php unset($_SESSION['passwordError']) ?>
+            <?php endif; ?>
             <div>
                 <label>Contraseña: </label>
                 <input type="password" name="Password" placeholder="Contraseña"
@@ -48,14 +60,26 @@ if (isset($_SESSION['usuario'])) {
                     title="La contraseña tiene que tener al menos 6 carácteres. Esos carácteres pueden ser mayúsculas, minúsculas, números o uno de estos carácteres especiales: @ # $ % ^ & - + = ( )"
                     pattern="^[A-Za-z0-9\@\#\$\%\^\&\-\+\=\(\)]{6,}$" maxlength="127" required>
             </div>
+            <?php if (isset($_SESSION['pogoUsernameError'])): ?>
+                <div><?= $_SESSION['pogoUsernameError'] ?></div>
+                <?php unset($_SESSION['pogoUsernameError']) ?>
+            <?php endif; ?>
             <div>
                 <label>Usuario de Pokémon GO: </label>
                 <input type="text" name="Pogo_Username" placeholder="Usuario de Pokémon GO" maxlength="15" required>
             </div>
+            <?php if (isset($_SESSION['levelError'])): ?>
+                <div><?= $_SESSION['levelError'] ?></div>
+                <?php unset($_SESSION['levelError']) ?>
+            <?php endif; ?>
             <div>
                 <label>Nivel: </label>
                 <input type="number" name="Level" placeholder="1-80" title="El nivel es: Mínimo 1 - Máximo: 80" min=1 max=80 required>
             </div>
+            <?php if (isset($_SESSION['teamError'])): ?>
+                <div><?= $_SESSION['teamError'] ?></div>
+                <?php unset($_SESSION['teamError']) ?>
+            <?php endif; ?>
             <div id="teamSelection">
                 <label>Equipo: <span id="teamName"></span></label><br>
                 <input type="hidden" id="Sin_equipo" name="Team" value="Sin equipo">
@@ -72,6 +96,10 @@ if (isset($_SESSION['usuario'])) {
                     <img src="../media/website/Logo_Equipo_Valor_GO.png" alt="Valor" title="Valor" width="50" height="50">
                 </label>
             </div>
+            <?php if (isset($_SESSION['friendCodeError'])): ?>
+                <div><?= $_SESSION['friendCodeError'] ?></div>
+                <?php unset($_SESSION['friendCodeError']) ?>
+            <?php endif; ?>
             <div>
                 <label>Código de amigo: </label>
                 <input type="text" name="Friend_code" placeholder="Código de amigo"
@@ -81,6 +109,10 @@ if (isset($_SESSION['usuario'])) {
             <div>
                 <input type="submit" value="Regístrame">
             </div>
+            <?php if (isset($_SESSION['db_error'])): ?>
+                <div><?= $_SESSION['db_error'] ?></div>
+                <?php unset($_SESSION['db_error']) ?>
+            <?php endif; ?>
         </form>
         <a class="loginLink" href="../login">¿Ya tienes una cuenta? Inicia sesión aquí</a>
     </section>

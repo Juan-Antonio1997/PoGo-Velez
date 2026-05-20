@@ -22,8 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $pogoUsernameCheck = True;
     }
     $usuario['Level'] = $_POST['Level'];
+    $minLevel = 1;
+    $maxLevel = 80;
     $levelCheck = False;
-    if ($usuario['Level'] >= 1 && $usuario['Level'] <= 80) {
+    if ($usuario['Level'] >= $minLevel && $usuario['Level'] <= $maxLevel) {
         $levelCheck = True;
     }
     $usuario['Team'] = $_POST['Team'];
@@ -34,10 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($usuario['Team'] == "Valor" || $usuario['Team'] == "Instinto" || $usuario['Team'] == "Sabiduría" || $usuario['Team'] == NULL) {
         $teamCheck = True;
     }
-    $friendCodeSeparator = array("-", " ");
-    $usuario['Friend_code'] = str_replace($friendCodeSeparator, "", $_POST['Friend_code']);
+    $usuario['Friend_code'] = $_POST['Friend_code'];
+    if (strpos($usuario['Friend_code'], "-") == 4 && strpos($usuario['Friend_code'], "-", 4 + 1) == 9 && strpos($usuario['Friend_code'], "-", 9 + 1) == False) {
+        $usuario['Friend_code'] = str_replace("-", "", $usuario['Friend_code']);
+    } elseif (strpos($usuario['Friend_code'], " ") == 4 && strpos($usuario['Friend_code'], " ", 4 + 1) == 9 && strpos($usuario['Friend_code'], " ", 9 + 1) == False) {
+        $usuario['Friend_code'] = str_replace(" ", "", $usuario['Friend_code']);
+    }
     $friendCodeCheck = False;
-    if (strlen($usuario['Friend_code']) == 12) {
+    if (is_numeric($usuario['Friend_code']) && strlen($usuario['Friend_code']) == 12) {
         $friendCodeCheck = True;
     }
     $fieldsCheck = False;
@@ -65,14 +71,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id = db_insert($db, 'usuarios', $usuario);
             $_SESSION['usuario'] = $usuario['Username'];
             $_SESSION['email'] = $usuario['Email'];
+            $_SESSION['pogo_username'] = $_POST['Pogo_Username'];
+            $_SESSION['login'] = "Tu registro se ha realizado con éxito. ¡Bienvenid@, " . $usuario['Username'] . "!";
             db_close($db);
             header('Location: ../');
         } else {
-            print "Error";
+            if (!(strlen($usuario['Username']) <= 20)) {
+                $_SESSION['usernameError'] = "Tu nombre de usuario es demasiado largo";
+            }
+            if (!(empty($usernameSearch))) {
+                $_SESSION['usernameError'] = "Ese nombre de usuario no está disponible";
+            }
+            if (!(strlen($usuario['Email']) <= 100)) {
+                $_SESSION['emailError'] = "Tu correo electrónico es demasiado largo";
+            }
+            if (!(empty($emailSearch))) {
+                $_SESSION['emailError'] = "Ese correo electrónico no está disponible";
+            }
+            if (!($_POST["Password"] === $_POST["Password2"])) {
+                $_SESSION['passwordError'] = "Las contraseñas no coinciden";
+            }
+            if (!(strlen($usuario['Pogo_Username']) <= 15)) {
+                $_SESSION['pogoUsernameError'] = "Tu nombre de usuario de Pokémon GO es demasiado largo";
+            }
+            if (!(empty($pogoUsernameSearch))) {
+                $_SESSION['pogoUsernameError'] = "Ese nombre de usuario de Pokémon GO no está disponible";
+            }
+            if (!($usuario['Level'] >= $minLevel && $usuario['Level'] <= $maxLevel)) {
+                $_SESSION['levelError'] = "Tu nivel de Pokémon GO debe estar entre " . $minLevel . " y " . $maxLevel . " (ambos incluidos)";
+            }
+            if (!($usuario['Team'] == "Valor" || $usuario['Team'] == "Instinto" || $usuario['Team'] == "Sabiduría" || $usuario['Team'] == NULL)) {
+                $_SESSION['teamError'] = "El equipo que has seleccionado no es válido";
+            }
+            if (!(is_numeric($usuario['Friend_code']) && strlen($usuario['Friend_code']) == 12)) {
+                $_SESSION['friendCodeError'] = "Tu código de amigo no es válido";
+            }
+            header('Location: ../registro');
             exit;
         }
     } else {
-        print "Se ha producido un error de conexión";
+        $_SESSION['db_error'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta registrarte de nuevo más tarde.";
+        header('Location: ../registro');
         exit;
     }
 }

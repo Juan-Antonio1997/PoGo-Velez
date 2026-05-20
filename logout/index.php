@@ -23,6 +23,8 @@ $_SESSION = [];
 #
 #session_destroy();
 
+$_SESSION['logout'] = "Se ha cerrado tu sesión con éxito";
+
 header('Location: ../');
 
 exit;

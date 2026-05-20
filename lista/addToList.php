@@ -31,11 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             db_close($db);
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         } else {
-            print "Error";
+            $_SESSION['addToListError'] = "Se ha producido un error al intentar apuntarte a esta lista. Por favor, inténtalo de nuevo más tarde.";
+            header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             exit;
         }
     } else {
-        print "Se ha producido un error de conexión";
+        $_SESSION['addToListError'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta apuntarte a esta lista más tarde.";
+        header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         exit;
     }
 }

@@ -149,6 +149,26 @@ if ($db) {
     </nav>
     <section>
         <article>
+            <?php if (isset($_SESSION['addToListError'])): ?>
+                <div><?= $_SESSION['addToListError'] ?></div>
+                <?php unset($_SESSION['addToListError']) ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['editListStatusError'])): ?>
+                <div><?= $_SESSION['editListStatusError'] ?></div>
+                <?php unset($_SESSION['editListStatusError']) ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['manageGuestsError'])): ?>
+                <div><?= $_SESSION['manageGuestsError'] ?></div>
+                <?php unset($_SESSION['manageGuestsError']) ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['removeFromListError'])): ?>
+                <div><?= $_SESSION['removeFromListError'] ?></div>
+                <?php unset($_SESSION['removeFromListError']) ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['deleteListError'])): ?>
+                <div><?= $_SESSION['deleteListError'] ?></div>
+                <?php unset($_SESSION['deleteListError']) ?>
+            <?php endif; ?>
             <?php if (!empty($lista)): ?>
                 <div class="pokeList">
                     <?php if ($lista[0]['Tipo_Raid'] == "Oscura"): ?>

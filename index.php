@@ -65,6 +65,18 @@ if ($db) {
         <?php endif; ?>
     </nav>
     <section>
+        <?php if (isset($_SESSION['login'])): ?>
+            <div><?= $_SESSION['login'] ?></div>
+            <?php unset($_SESSION['login']) ?>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['logout'])): ?>
+            <div><?= $_SESSION['logout'] ?></div>
+            <?php unset($_SESSION['logout']) ?>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['deletedList'])): ?>
+            <div><?= $_SESSION['deletedList'] ?></div>
+            <?php unset($_SESSION['deletedList']) ?>
+        <?php endif; ?>
         <a class="buttonLink" href="crearlista"><button class="createList">Crear lista</button></a>
         <article>
             <?php if (!empty($listas)): ?>
