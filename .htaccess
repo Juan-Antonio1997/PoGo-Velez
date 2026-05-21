@@ -1,1 +1,2 @@
-Redirect 301 "/test.php" "/"
+Redirect 301 "/datos.php" "/"
+Redirect 301 "/lista/datos.php" "/lista"
