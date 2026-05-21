@@ -66,15 +66,39 @@ if ($db) {
     </nav>
     <section>
         <?php if (isset($_SESSION['login'])): ?>
-            <div><?= $_SESSION['login'] ?></div>
+            <div class="alertBox" id="loginAlert">
+                <div class="alertSuccess">
+                    <span class="closeAlertBtn">&times;</span>
+                    <?= $_SESSION['login'] ?>
+                </div>
+            </div>
             <?php unset($_SESSION['login']) ?>
         <?php endif; ?>
         <?php if (isset($_SESSION['logout'])): ?>
-            <div><?= $_SESSION['logout'] ?></div>
+            <div class="alertBox" id="logoutAlert">
+                <div class="alertSuccess">
+                    <span class="closeAlertBtn">&times;</span>
+                    <?= $_SESSION['logout'] ?>
+                </div>
+            </div>
             <?php unset($_SESSION['logout']) ?>
         <?php endif; ?>
+        <?php if (isset($_SESSION['logoutError'])): ?>
+            <div class="alertBox" id="logoutErrorAlert">
+                <div class="alertError">
+                    <span class="closeAlertBtn">&times;</span>
+                    <?= $_SESSION['logoutError'] ?>
+                </div>
+            </div>
+            <?php unset($_SESSION['logoutError']) ?>
+        <?php endif; ?>
         <?php if (isset($_SESSION['deletedList'])): ?>
-            <div><?= $_SESSION['deletedList'] ?></div>
+            <div class="alertBox" id="deletedListAlert">
+                <div class="alertSuccess">
+                    <span class="closeAlertBtn">&times;</span>
+                    <?= $_SESSION['deletedList'] ?>
+                </div>
+            </div>
             <?php unset($_SESSION['deletedList']) ?>
         <?php endif; ?>
         <a class="buttonLink" href="crearlista"><button class="createList">Crear lista</button></a>
@@ -151,8 +175,10 @@ if ($db) {
         </article>
     </section>
     <footer>
-
+        <div>Juan Antonio Gómez Martín - 2026</div>
+        <div>©Niantic ©Pokémon/Nintendo/Creatures/GAME FREAK TM, ® y los nombres de los personajes son marcas comerciales de Nintendo.</div>
     </footer>
+    <script src="script.js"></script>
 </body>
 
 </html>

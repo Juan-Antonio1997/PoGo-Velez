@@ -45,12 +45,13 @@ if ($db) {
     </nav>
     <section>
         <article>
-            <?php if (isset($_SESSION['db_error'])): ?>
-                <div><?= $_SESSION['db_error'] ?></div>
-                <?php unset($_SESSION['db_error']) ?>
-            <?php endif; ?>
             <?php if (isset($_SESSION['crearListaError'])): ?>
-                <div><?= $_SESSION['crearListaError'] ?></div>
+                <div class="alertBox" id="listCreationAlert">
+                    <div class="alertError">
+                        <span class="closeAlertBtn">&times;</span>
+                        <?= $_SESSION['crearListaError'] ?>
+                    </div>
+                </div>
                 <?php unset($_SESSION['crearListaError']) ?>
             <?php endif; ?>
             <form action="crearLista.php" method="POST">
@@ -180,7 +181,8 @@ if ($db) {
         </article>
     </section>
     <footer>
-
+        <div>Juan Antonio Gómez Martín - 2026</div>
+        <div>©Niantic ©Pokémon/Nintendo/Creatures/GAME FREAK TM, ® y los nombres de los personajes son marcas comerciales de Nintendo.</div>
     </footer>
     <script src="script.js"></script>
 </body>

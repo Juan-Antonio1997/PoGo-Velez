@@ -28,15 +28,21 @@ if (isset($_SESSION['usuario'])) {
     </header>
     <section>
         <?php if (isset($_SESSION['advertencia'])): ?>
-            <div><?= $_SESSION['advertencia'] ?></div>
+            <div class="alertBox" id="warningAlert">
+                <div class="alertWarning">
+                    <span class="closeAlertBtn">&times;</span>
+                    <?= $_SESSION['advertencia'] ?>
+                </div>
+            </div>
             <?php unset($_SESSION['advertencia']) ?>
         <?php endif; ?>
-        <?php if (isset($_SESSION['db_error'])): ?>
-            <div><?= $_SESSION['db_error'] ?></div>
-            <?php unset($_SESSION['db_error']) ?>
-        <?php endif; ?>
         <?php if (isset($_SESSION['loginIncorrecto'])): ?>
-            <div><?= $_SESSION['loginIncorrecto'] ?></div>
+            <div class="alertBox" id="wrongLoginAlert">
+                <div class="alertError">
+                    <span class="closeAlertBtn">&times;</span>
+                    <?= $_SESSION['loginIncorrecto'] ?>
+                </div>
+            </div>
             <?php unset($_SESSION['loginIncorrecto']) ?>
         <?php endif; ?>
         <form action="login.php" method="POST">
@@ -56,6 +62,11 @@ if (isset($_SESSION['usuario'])) {
             </div>
         </form>
     </section>
+    <footer>
+        <div>Juan Antonio Gómez Martín - 2026</div>
+        <div>©Niantic ©Pokémon/Nintendo/Creatures/GAME FREAK TM, ® y los nombres de los personajes son marcas comerciales de Nintendo.</div>
+    </footer>
+    <script src="../script.js"></script>
 </body>
 
 </html>

@@ -149,6 +149,15 @@ if ($db) {
     </nav>
     <section>
         <article>
+            <?php if (isset($_SESSION['listaCreada'])): ?>
+            <div class="alertBox" id="createdListAlert">
+                <div class="alertSuccess">
+                    <span class="closeAlertBtn">&times;</span>
+                    <?= $_SESSION['listaCreada'] ?>
+                </div>
+            </div>
+            <?php unset($_SESSION['listaCreada']) ?>
+        <?php endif; ?>
             <?php if (isset($_SESSION['addToListError'])): ?>
                 <div><?= $_SESSION['addToListError'] ?></div>
                 <?php unset($_SESSION['addToListError']) ?>
@@ -425,7 +434,8 @@ if ($db) {
         </article>
     </section>
     <footer>
-
+        <div>Juan Antonio Gómez Martín - 2026</div>
+        <div>©Niantic ©Pokémon/Nintendo/Creatures/GAME FREAK TM, ® y los nombres de los personajes son marcas comerciales de Nintendo.</div>
     </footer>
 </body>
 <script>
@@ -468,6 +478,17 @@ if ($db) {
             }
         }
     <?php endif; ?>
+
+    var closeAlert = document.getElementsByClassName("closeAlertBtn");
+    var i;
+    for (i = 0; i < closeAlert.length; i++) {
+        closeAlert[i].onclick = function () {
+            var childDiv = this.parentElement;
+            div = childDiv.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function () { div.style.display = "none"; }, 600);
+        }
+    }
 </script>
 
 </html>

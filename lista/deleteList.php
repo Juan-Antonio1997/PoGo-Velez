@@ -44,4 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         exit;
     }
+} else {
+    header('Location: ../');
+    exit;
 }

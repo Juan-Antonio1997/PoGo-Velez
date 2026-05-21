@@ -34,7 +34,7 @@ if ($db) {
         exit;
     }
 } else {
-    $_SESSION['db_error'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta iniciar sesión más tarde.";
+    $_SESSION['loginIncorrecto'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta iniciar sesión más tarde.";
     header('Location: ../login');
     exit;
 }

@@ -114,7 +114,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: ../registro');
         exit;
     }
+} else {
+    header('Location: ../registro');
+    exit;
 }
+
 #print_r($_POST);
 #print "<br>";
 #$hashedPass = password_hash($_POST["Password"], PASSWORD_DEFAULT);

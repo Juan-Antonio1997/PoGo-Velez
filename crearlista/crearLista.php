@@ -16,17 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     };
     $currDate = date("Y-m-d");
     $currTime = date("H:i:s");
-    $lista['Hora_creacion'] = $currDate." ".$currTime;
-    $lista['Hora_quedada'] = $currDate." ".$_POST['Hora_quedada'].":00";
+    $lista['Hora_creacion'] = $currDate . " " . $currTime;
+    $lista['Hora_quedada'] = $currDate . " " . $_POST['Hora_quedada'] . ":00";
     $validateTime = False;
     if (strtotime($lista['Hora_creacion']) < strtotime($lista['Hora_quedada'])) {
         $validateTime = True;
     }
-    if (strlen($_POST['Hora_inicio']) > 0 ) {
-    $lista['Hora_inicio'] = $currDate." ".$_POST['Hora_inicio'].":00";
+    if (strlen($_POST['Hora_inicio']) > 0) {
+        $lista['Hora_inicio'] = $currDate . " " . $_POST['Hora_inicio'] . ":00";
     };
-    if (strlen($_POST['Hora_fin']) > 0 ) {
-    $lista['Hora_fin'] = $currDate." ".$_POST['Hora_fin'].":00";
+    if (strlen($_POST['Hora_fin']) > 0) {
+        $lista['Hora_fin'] = $currDate . " " . $_POST['Hora_fin'] . ":00";
     }
     $lista['Tiempo_atmos'] = $_POST['Tiempo_atmos'];
     $db = db_open();
@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $apuntado['Hora_ultimo_cambio'] = $lista['Hora_creacion'];
             $id2 = db_insert($db, 'apuntados_lista', $apuntado);
             db_close($db);
+            $_SESSION['listaCreada'] = "¡Se ha creado la lista con éxito! Su ID es: " . $id;
             header("Location: ../lista/?id=" . $id);
             exit;
         } else {
@@ -49,8 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
     } else {
-        $_SESSION['db_error'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta crear la lista más tarde.";
+        $_SESSION['crearListaError'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta crear la lista más tarde.";
         header("Location: ../crearlista");
         exit;
     }
+} else {
+    header('Location: ../crearLista');
+    exit;
 }
