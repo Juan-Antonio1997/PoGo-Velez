@@ -4,8 +4,9 @@ require_once('../db_pdo.php');
 session_start();
 date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
-    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder borrar una lista!";
+    $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder borrar una lista!";
     header('Location: ../login');
+    exit;
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario['ID_Lista'] = $_POST['ID_Lista'];
@@ -32,15 +33,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             WHERE ID_Lista = (?)", [$usuario['ID_Lista']]);
             $deleteList = db_delete_by_id($db, 'listas', $usuario['ID_Lista'], "ID_Lista");
             db_close($db);
-            $_SESSION['deletedList'] = "Se ha borrado la lista con ID " . $usuario['ID_Lista'] . " con éxito";
+            $_SESSION['successAlert'] = "Se ha borrado la lista con ID " . $usuario['ID_Lista'] . " con éxito";
             header("Location: ../");
+            exit;
         } else {
-            $_SESSION['deleteListError'] = "Se ha producido un error al intentar borrar esta lista. Por favor, inténtalo más tarde.";
+            $_SESSION['errorAlert'] = "Se ha producido un error al intentar borrar esta lista. Por favor, inténtalo más tarde.";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             exit;
         }
     } else {
-        $_SESSION['deleteListError'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta borrar esta lista más tarde.";
+        $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta borrar esta lista más tarde.";
         header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         exit;
     }

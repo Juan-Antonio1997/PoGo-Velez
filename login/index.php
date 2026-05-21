@@ -2,6 +2,7 @@
 session_start();
 if (isset($_SESSION['usuario'])) {
     header('Location: ../');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -27,23 +28,23 @@ if (isset($_SESSION['usuario'])) {
         </nav>
     </header>
     <section>
-        <?php if (isset($_SESSION['advertencia'])): ?>
+        <?php if (isset($_SESSION['warningAlert'])): ?>
             <div class="alertBox" id="warningAlert">
                 <div class="alertWarning">
                     <span class="closeAlertBtn">&times;</span>
-                    <?= $_SESSION['advertencia'] ?>
+                    <?= $_SESSION['warningAlert'] ?>
                 </div>
             </div>
-            <?php unset($_SESSION['advertencia']) ?>
+            <?php unset($_SESSION['warningAlert']) ?>
         <?php endif; ?>
-        <?php if (isset($_SESSION['loginIncorrecto'])): ?>
-            <div class="alertBox" id="wrongLoginAlert">
+        <?php if (isset($_SESSION['errorAlert'])): ?>
+            <div class="alertBox" id="errorAlert">
                 <div class="alertError">
                     <span class="closeAlertBtn">&times;</span>
-                    <?= $_SESSION['loginIncorrecto'] ?>
+                    <?= $_SESSION['errorAlert'] ?>
                 </div>
             </div>
-            <?php unset($_SESSION['loginIncorrecto']) ?>
+            <?php unset($_SESSION['errorAlert']) ?>
         <?php endif; ?>
         <form action="login.php" method="POST">
             <div>

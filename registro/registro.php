@@ -3,6 +3,10 @@ require_once('../config.php');
 require_once('../db_pdo.php');
 session_start();
 date_default_timezone_set('Europe/Madrid');
+if (isset($_SESSION['usuario'])) {
+    header('Location: ../');
+    exit;
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hashedPass = password_hash($_POST["Password"], PASSWORD_DEFAULT);
     $usuario['Username'] = $_POST['Username'];
@@ -72,9 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['usuario'] = $usuario['Username'];
             $_SESSION['email'] = $usuario['Email'];
             $_SESSION['pogo_username'] = $_POST['Pogo_Username'];
-            $_SESSION['login'] = "Tu registro se ha realizado con éxito. ¡Bienvenid@, " . $usuario['Username'] . "!";
             db_close($db);
+            $_SESSION['successAlert'] = "Tu registro se ha realizado con éxito. ¡Bienvenid@, " . $usuario['Username'] . "!";
             header('Location: ../');
+            exit;
         } else {
             if (!(strlen($usuario['Username']) <= 20)) {
                 $_SESSION['usernameError'] = "Tu nombre de usuario es demasiado largo";

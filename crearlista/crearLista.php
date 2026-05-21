@@ -4,8 +4,9 @@ require_once('../db_pdo.php');
 session_start();
 date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
-    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
+    $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
     header('Location: ../login');
+    exit;
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lista['ID_Raid'] = $_POST['ID_Raid'];
@@ -41,16 +42,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $apuntado['Hora_ultimo_cambio'] = $lista['Hora_creacion'];
             $id2 = db_insert($db, 'apuntados_lista', $apuntado);
             db_close($db);
-            $_SESSION['listaCreada'] = "¡Se ha creado la lista con éxito! Su ID es: " . $id;
+            $_SESSION['successAlert'] = "¡Se ha creado la lista con éxito! Su ID es: " . $id;
             header("Location: ../lista/?id=" . $id);
             exit;
         } else {
-            $_SESSION['crearListaError'] = "Se ha producido un error al crear la lista. Por favor, inténtalo de nuevo más tarde.";
+            $_SESSION['errorAlert'] = "Se ha producido un error al crear la lista. Por favor, inténtalo de nuevo más tarde.";
             header("Location: ../crearlista");
             exit;
         }
     } else {
-        $_SESSION['crearListaError'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta crear la lista más tarde.";
+        $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta crear la lista más tarde.";
         header("Location: ../crearlista");
         exit;
     }

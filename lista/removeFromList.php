@@ -4,8 +4,9 @@ require_once('../db_pdo.php');
 session_start();
 date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
-    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder desapuntarte de una lista!";
+    $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder desapuntarte de una lista!";
     header('Location: ../login');
+    exit;
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario['ID_Lista'] = $_POST['ID_Lista'];
@@ -24,14 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             SET Estado = (?), Invitado_presencial = (?), Invitado_remoto = (?), Hora_ultimo_cambio = (?)
             WHERE ID_Lista = (?) AND Username = (?)", [$usuario['Estado'], $usuario['Invitado_presencial'], $usuario['Invitado_remoto'], $usuario['Hora_ultimo_cambio'], $usuario['ID_Lista'], $usuario['Username']]);
             db_close($db);
+            $_SESSION['successAlert'] = "Te he desapuntado de esta lista, pero tu nombre aún aparecerá en ella, aunque estará tachado";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+            exit;
         } else {
-            $_SESSION['removeFromListError'] = "Se ha producido un error al intentar desapuntarte de esta lista. Por favor, inténtalo de nuevo más tarde.";
+            $_SESSION['errorAlert'] = "Se ha producido un error al intentar desapuntarte de esta lista. Por favor, inténtalo de nuevo más tarde.";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             exit;
         }
     } else {
-        $_SESSION['removeFromListError'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta desapuntarte de esta lista más tarde.";
+        $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta desapuntarte de esta lista más tarde.";
         header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         exit;
     }

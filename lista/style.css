@@ -116,6 +116,14 @@ section {
     margin-bottom: 5px;
 }
 
+.alertWarning {
+    padding: 5px;
+    background-color: #FF9800;
+    color: white;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .alertError {
     padding: 20px;
     background-color: #F44336;
@@ -130,7 +138,7 @@ section {
     font-weight: bold;
     float: right;
     font-size: 22px;
-    line-height: 20px;
+    line-height: 22.5px;
     cursor: pointer;
     transition: 0.3s;
 }

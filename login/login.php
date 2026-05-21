@@ -4,6 +4,10 @@ require_once('../db_pdo.php');
 $db = db_open();
 session_start();
 date_default_timezone_set('Europe/Madrid');
+if (isset($_SESSION['usuario'])) {
+    header('Location: ../');
+    exit;
+}
 if ($db) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $usuario = db_query($db, "SELECT * FROM usuarios WHERE LOWER(Username)=LOWER(?) OR LOWER(Email)=LOWER(?)", [$_POST['User'], $_POST['User']]);
@@ -16,16 +20,16 @@ if ($db) {
                 $_SESSION['usuario'] = $username;
                 $_SESSION['email'] = $email;
                 $_SESSION['pogo_username'] = $pogo_username;
-                $_SESSION['login'] = "¡Bienvenid@, " . $username . "!";
+                $_SESSION['successAlert'] = "¡Bienvenid@, " . $username . "!";
                 header('Location: ../');
                 exit;
             } else {
-                $_SESSION['loginIncorrecto'] = 'Usuario, email o contraseña incorrecto';
+                $_SESSION['errorAlert'] = 'Usuario, email o contraseña incorrecto';
                 header('Location: ../login');
                 exit;
             }
         } else {
-            $_SESSION['loginIncorrecto'] = 'Usuario, email o contraseña incorrecto';
+            $_SESSION['errorAlert'] = 'Usuario, email o contraseña incorrecto';
             header('Location: ../login');
             exit;
         }
@@ -34,7 +38,7 @@ if ($db) {
         exit;
     }
 } else {
-    $_SESSION['loginIncorrecto'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta iniciar sesión más tarde.";
+    $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta iniciar sesión más tarde.";
     header('Location: ../login');
     exit;
 }

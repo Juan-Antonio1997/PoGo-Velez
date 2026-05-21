@@ -4,8 +4,9 @@ require_once('../db_pdo.php');
 session_start();
 date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
-    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder hacer cambios en una lista!";
+    $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder hacer cambios en una lista!";
     header('Location: ../login');
+    exit;
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario['ID_Lista'] = $_POST['ID_Lista'];
@@ -43,10 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 SET Invitado_presencial = (?), Hora_ultimo_cambio = (?)
                 WHERE ID_Lista = (?) AND Username = (?)", [$usuario['Invitado_presencial'], $usuario['Hora_ultimo_cambio'], $usuario['ID_Lista'], $usuario['Username']]);
                 db_close($db);
+                $_SESSION['successAlert'] = "He cambiado el número de personas que te van a acompañar de forma presencial a: " . $usuario['Invitado_presencial'];
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+                exit;
             } else {
-                $_SESSION['manageGuestsError'] = "Ha ocurrido un error al intentar añadir invitados presenciales: El número de participantes totales habría excedido el máximo permitido si se hubiesen añadido esos invitados";
+                $_SESSION['errorAlert'] = "Ha ocurrido un error al intentar añadir invitados presenciales: El número de participantes totales habría excedido el máximo permitido si se hubiesen añadido esos invitados";
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+                exit;
             }
         } elseif (!empty($comprobacionApuntado) && $_POST['Tipo_Invitado'] == "Remoto") {
             $usuario['Invitado_remoto'] = $_POST['Invitado_remoto'];
@@ -55,18 +59,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 SET Invitado_remoto = (?), Hora_ultimo_cambio = (?)
                 WHERE ID_Lista = (?) AND Username = (?)", [$usuario['Invitado_remoto'], $usuario['Hora_ultimo_cambio'], $usuario['ID_Lista'], $usuario['Username']]);
                 db_close($db);
+                $_SESSION['successAlert'] = "He cambiado el número de personas que vas a invitar de forma remota a: " . $usuario['Invitado_remoto'];
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+                exit;
             } else {
-                $_SESSION['manageGuestsError'] = "Ha ocurrido un error al intentar añadir invitados remotos: El número de participantes remotos totales habría excedido el máximo permitido si se hubiesen añadido esos invitados";
+                $_SESSION['errorAlert'] = "Ha ocurrido un error al intentar añadir invitados remotos: El número de participantes remotos totales habría excedido el máximo permitido si se hubiesen añadido esos invitados";
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+                exit;
             }
         } else {
-            $_SESSION['manageGuestsError'] = "SE ha producido un error al intentar cambiar el número de invitados: Inténtalo de nuevo más tarde";
+            $_SESSION['errorAlert'] = "SE ha producido un error al intentar cambiar el número de invitados: Inténtalo de nuevo más tarde";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
             exit;
         }
     } else {
-        $_SESSION['manageGuestsError'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta cambiar el número de personas que vas a invitar a esta lista más tarde.";
+        $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta cambiar el número de personas que vas a invitar a esta lista más tarde.";
         header("Location: ../lista/?id=" . $usuario['ID_Lista']);
         exit;
     }

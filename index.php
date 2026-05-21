@@ -65,41 +65,23 @@ if ($db) {
         <?php endif; ?>
     </nav>
     <section>
-        <?php if (isset($_SESSION['login'])): ?>
-            <div class="alertBox" id="loginAlert">
+        <?php if (isset($_SESSION['successAlert'])): ?>
+            <div class="alertBox" id="successAlert">
                 <div class="alertSuccess">
                     <span class="closeAlertBtn">&times;</span>
-                    <?= $_SESSION['login'] ?>
+                    <?= $_SESSION['successAlert'] ?>
                 </div>
             </div>
-            <?php unset($_SESSION['login']) ?>
+            <?php unset($_SESSION['successAlert']) ?>
         <?php endif; ?>
-        <?php if (isset($_SESSION['logout'])): ?>
-            <div class="alertBox" id="logoutAlert">
-                <div class="alertSuccess">
-                    <span class="closeAlertBtn">&times;</span>
-                    <?= $_SESSION['logout'] ?>
-                </div>
-            </div>
-            <?php unset($_SESSION['logout']) ?>
-        <?php endif; ?>
-        <?php if (isset($_SESSION['logoutError'])): ?>
-            <div class="alertBox" id="logoutErrorAlert">
+        <?php if (isset($_SESSION['errorAlert'])): ?>
+            <div class="alertBox" id="errorAlert">
                 <div class="alertError">
                     <span class="closeAlertBtn">&times;</span>
-                    <?= $_SESSION['logoutError'] ?>
+                    <?= $_SESSION['errorAlert'] ?>
                 </div>
             </div>
-            <?php unset($_SESSION['logoutError']) ?>
-        <?php endif; ?>
-        <?php if (isset($_SESSION['deletedList'])): ?>
-            <div class="alertBox" id="deletedListAlert">
-                <div class="alertSuccess">
-                    <span class="closeAlertBtn">&times;</span>
-                    <?= $_SESSION['deletedList'] ?>
-                </div>
-            </div>
-            <?php unset($_SESSION['deletedList']) ?>
+            <?php unset($_SESSION['errorAlert']) ?>
         <?php endif; ?>
         <a class="buttonLink" href="crearlista"><button class="createList">Crear lista</button></a>
         <article>

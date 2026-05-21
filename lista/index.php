@@ -4,8 +4,9 @@ require_once('../db_pdo.php');
 $db = db_open();
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder acceder a una lista!";
+    $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder acceder a una lista!";
     header('Location: ../login');
+    exit;
 }
 if ($db) {
     if (isset($_GET['id'])) {
@@ -114,6 +115,7 @@ if ($db) {
         }
     } else {
         header('Location: ../');
+        exit;
     }
     #print_r($comprobacionApuntado[0]);
 }
@@ -149,34 +151,32 @@ if ($db) {
     </nav>
     <section>
         <article>
-            <?php if (isset($_SESSION['listaCreada'])): ?>
-            <div class="alertBox" id="createdListAlert">
-                <div class="alertSuccess">
-                    <span class="closeAlertBtn">&times;</span>
-                    <?= $_SESSION['listaCreada'] ?>
+            <?php if (isset($_SESSION['successAlert'])): ?>
+                <div class="alertBox" id="successAlert">
+                    <div class="alertSuccess">
+                        <span class="closeAlertBtn">&times;</span>
+                        <?= $_SESSION['successAlert'] ?>
+                    </div>
                 </div>
-            </div>
-            <?php unset($_SESSION['listaCreada']) ?>
-        <?php endif; ?>
-            <?php if (isset($_SESSION['addToListError'])): ?>
-                <div><?= $_SESSION['addToListError'] ?></div>
-                <?php unset($_SESSION['addToListError']) ?>
+                <?php unset($_SESSION['successAlert']) ?>
             <?php endif; ?>
-            <?php if (isset($_SESSION['editListStatusError'])): ?>
-                <div><?= $_SESSION['editListStatusError'] ?></div>
-                <?php unset($_SESSION['editListStatusError']) ?>
+            <?php if (isset($_SESSION['warningAlert'])): ?>
+                <div class="alertBox" id="warningAlert">
+                    <div class="alertWarning">
+                        <span class="closeAlertBtn">&times;</span>
+                        <?= $_SESSION['warningAlert'] ?>
+                    </div>
+                </div>
+                <?php unset($_SESSION['warningAlert']) ?>
             <?php endif; ?>
-            <?php if (isset($_SESSION['manageGuestsError'])): ?>
-                <div><?= $_SESSION['manageGuestsError'] ?></div>
-                <?php unset($_SESSION['manageGuestsError']) ?>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['removeFromListError'])): ?>
-                <div><?= $_SESSION['removeFromListError'] ?></div>
-                <?php unset($_SESSION['removeFromListError']) ?>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['deleteListError'])): ?>
-                <div><?= $_SESSION['deleteListError'] ?></div>
-                <?php unset($_SESSION['deleteListError']) ?>
+            <?php if (isset($_SESSION['errorAlert'])): ?>
+                <div class="alertBox" id="errorAlert">
+                    <div class="alertError">
+                        <span class="closeAlertBtn">&times;</span>
+                        <?= $_SESSION['errorAlert'] ?>
+                    </div>
+                </div>
+                <?php unset($_SESSION['errorAlert']) ?>
             <?php endif; ?>
             <?php if (!empty($lista)): ?>
                 <div class="pokeList">
@@ -482,11 +482,13 @@ if ($db) {
     var closeAlert = document.getElementsByClassName("closeAlertBtn");
     var i;
     for (i = 0; i < closeAlert.length; i++) {
-        closeAlert[i].onclick = function () {
+        closeAlert[i].onclick = function() {
             var childDiv = this.parentElement;
             div = childDiv.parentElement;
             div.style.opacity = "0";
-            setTimeout(function () { div.style.display = "none"; }, 600);
+            setTimeout(function() {
+                div.style.display = "none";
+            }, 600);
         }
     }
 </script>

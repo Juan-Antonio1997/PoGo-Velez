@@ -20,10 +20,11 @@ if (isset($_SESSION['usuario'])) {
     #}
     #
     #session_destroy();
-    $_SESSION['logout'] = "Se ha cerrado tu sesión con éxito";
+    $_SESSION['successAlert'] = "Se ha cerrado tu sesión con éxito";
     header('Location: ../');
     exit;
 } else {
-    $_SESSION['logoutError'] = "No tienes una sesión iniciada";
+    $_SESSION['errorAlert'] = "No tienes una sesión iniciada";
     header('Location: ../');
+    exit;
 }

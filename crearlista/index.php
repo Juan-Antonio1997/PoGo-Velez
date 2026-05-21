@@ -4,8 +4,9 @@ require_once('../db_pdo.php');
 $db = db_open();
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    $_SESSION['advertencia'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
+    $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
     header('Location: ../login');
+    exit;
 }
 if ($db) {
     $raidBosses = db_query($db, "SELECT i.*, p.* 
@@ -45,14 +46,14 @@ if ($db) {
     </nav>
     <section>
         <article>
-            <?php if (isset($_SESSION['crearListaError'])): ?>
-                <div class="alertBox" id="listCreationAlert">
+            <?php if (isset($_SESSION['errorAlert'])): ?>
+                <div class="alertBox" id="errorAlert">
                     <div class="alertError">
                         <span class="closeAlertBtn">&times;</span>
-                        <?= $_SESSION['crearListaError'] ?>
+                        <?= $_SESSION['errorAlert'] ?>
                     </div>
                 </div>
-                <?php unset($_SESSION['crearListaError']) ?>
+                <?php unset($_SESSION['errorAlert']) ?>
             <?php endif; ?>
             <form action="crearLista.php" method="POST">
                 <div>Jefe de incursión: <span id="bossName"></span></div>
