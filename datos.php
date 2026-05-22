@@ -37,8 +37,11 @@ if ($db) {
         $listas[$i]['Remotos'] = $remotos[0]['Num_Remotos'];
         /* Sumo los invitados remotos al número de apuntados remotos */
         $listas[$i]['Remotos'] = $listas[$i]['Remotos'] + $invitadoRemoto[0]['Total_invitados_remotos'];
+        /* Convierto la hora de la quedada en la marca de tiempo de Unix */
         $fecha = strtotime($listas[$i]['Hora_quedada']);
+        /* Y de esa marca de tiempo extraigo la fecha */
         $listas[$i]['fecha'] = date("d/m/Y", $fecha);
+        /* Y luego la hora (pero solo mostrando las horas y los minutos) */
         $listas[$i]['hora'] = date("H:i", $fecha);
     }
 }
