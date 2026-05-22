@@ -24,11 +24,13 @@ if (!isset($_SESSION['usuario'])) {
     </header>
     <nav>
         <?php if (isset($_SESSION['usuario'])): ?>
+            <?php /* Si hay una sesión de usuario activa, muestro los botones de cerrar sesión, y un saludo (se cambiará a "Mi perfil") */ ?>
             <ul class="navList">
                 <li class="navElement"><a href="../logout">Cerrar sesión</a></li>
                 <li class="navElement"><span>¡Hola <?= $_SESSION['usuario'] ?>!</span></li>
             </ul>
         <?php else: ?>
+            <?php /* Si no hay una sesión de usuario activa, muestro los botones de registro y de inicio de sesión */ ?>
             <ul class="navList">
                 <li class="navElement"><a href="../registro">Regístrate</a></li>
                 <li class="navElement"><a href="../login">Iniciar sesión</a></li>
@@ -37,6 +39,9 @@ if (!isset($_SESSION['usuario'])) {
     </nav>
     <section>
         <article>
+            <?php /* Si hay una variable de sesión de una alerta de tipo éxito, la muestro y la desasigno. 
+            Las alertas tienen un botón de cerrado (marcado con un símbolo de X codificado como "&times;")
+            para que, al ser pulsados, desaparezcan. */ ?>
             <?php if (isset($_SESSION['successAlert'])): ?>
                 <div class="alertBox" id="successAlert">
                     <div class="alertSuccess">
@@ -46,6 +51,7 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
                 <?php unset($_SESSION['successAlert']) ?>
             <?php endif; ?>
+            <?php /* Si hay una variable de sesión de una alerta de tipo advertencia, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['warningAlert'])): ?>
                 <div class="alertBox" id="warningAlert">
                     <div class="alertWarning">
@@ -55,6 +61,7 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
                 <?php unset($_SESSION['warningAlert']) ?>
             <?php endif; ?>
+            <?php /* Si hay una variable de sesión de una alerta de tipo error, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['errorAlert'])): ?>
                 <div class="alertBox" id="errorAlert">
                     <div class="alertError">
@@ -67,9 +74,11 @@ if (!isset($_SESSION['usuario'])) {
             <?php if (!empty($lista)): ?>
                 <div class="pokeList">
                     <?php if ($lista[0]['Tipo_Raid'] == "Oscura"): ?>
+                        <?php /* Si el tipo de incursión es oscura, muestro el icono de un Pokémon oscuro, y añado "Oscuro" a su nombre */ ?>
                         <div class="pokemonIcon">
                             <img id="pokemonSprite" src="../media/pokemon/<?= $lista[0]['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista[0]['Nombre'] ?> Oscuro" title="<?= $lista[0]['Nombre'] ?> Oscuro">
                             <?php if ($lista[0]['Shiny_activado']): ?>
+                                <?php /* Si tiene su variocolor activado, muestro el icono de variocolor */ ?>
                                 <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="60" alt="No variocolor" title="Pulsa para mostrar el variocolor">
                             <?php endif; ?>
                             <img id="shadowIcon" src="../media/raids/Shadow.webp" height="60" alt="Oscuro" title="Oscuro">
@@ -78,9 +87,11 @@ if (!isset($_SESSION['usuario'])) {
                             <span><?= $lista[0]['Nombre'] ?> Oscuro</span>
                         </div>
                     <?php elseif ($lista[0]['Tipo_Raid'] == "Dinamax"): ?>
+                        <?php /* Si el tipo de incursión es dinamax, muestro el icono de un Pokémon dinamax, y añado "Dinamax" a su nombre */ ?>
                         <div class="pokemonIcon">
                             <img id="pokemonSprite" src="../media/pokemon/<?= $lista[0]['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista[0]['Nombre'] ?> Dinamax" title="<?= $lista[0]['Nombre'] ?> Dinamax">
                             <?php if ($lista[0]['Shiny_activado']): ?>
+                                <?php /* Si tiene su variocolor activado, muestro el icono de variocolor */ ?>
                                 <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="60" alt="No variocolor" title="Pulsa para mostrar el variocolor">
                             <?php endif; ?>
                             <img id="maxIcon" src="../media/raids/Dynamax.webp" height="90" alt="Dinamax" title="Dinamax">
@@ -89,9 +100,12 @@ if (!isset($_SESSION['usuario'])) {
                             <span><?= $lista[0]['Nombre'] ?> Dinamax</span>
                         </div>
                     <?php elseif ($lista[0]['Tipo_Raid'] == "Gigamax"): ?>
+                        <?php /* Si el tipo de incursión es gigamax, muestro el icono de un Pokémon gigamax, 
+                                pero no hace falta añadir "Gigamax" a su nombre, ya que viene así en la base de datos */ ?>
                         <div class="pokemonIcon">
                             <img id="pokemonSprite" src="../media/pokemon/<?= $lista[0]['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista[0]['Nombre'] ?>" title="<?= $lista[0]['Nombre'] ?>">
                             <?php if ($lista[0]['Shiny_activado']): ?>
+                                <?php /* Si tiene su variocolor activado, muestro el icono de variocolor */ ?>
                                 <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="60" alt="No variocolor" title="Pulsa para mostrar el variocolor">
                             <?php endif; ?>
                             <img id="maxIcon" src="../media/raids/Gigantamax.webp" height="90" alt="Gigamax" title="Gigamax">
@@ -100,9 +114,11 @@ if (!isset($_SESSION['usuario'])) {
                             <span><?= $lista[0]['Nombre'] ?></span>
                         </div>
                     <?php else: ?>
+                        <?php /* Si no es ninguno de los tipos anteriores, no añado ningún icono */ ?>
                         <div class="pokemonIcon">
                             <img id="pokemonSprite" src="../media/pokemon/<?= $lista[0]['ID_Pokemon'] ?>.png" height="150" alt="<?= $lista[0]['Nombre'] ?>" title="<?= $lista[0]['Nombre'] ?>">
                             <?php if ($lista[0]['Shiny_activado']): ?>
+                                <?php /* Si tiene su variocolor activado, muestro el icono de variocolor */ ?>
                                 <img id="shinyIcon" src="../media/raids/Shiny-Off.png" height="60" alt="No variocolor" title="Pulsa para mostrar el variocolor">
                             <?php endif; ?>
                         </div>

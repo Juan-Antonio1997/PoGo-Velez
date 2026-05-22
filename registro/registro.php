@@ -1,7 +1,10 @@
 <?php
+/* Obtengo el PDO y la configuración para poder manipular bases de datos */
 require_once('../config.php');
 require_once('../db_pdo.php');
+/* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
+/* Establezco que la zona horaria por defecto sea la de Europa/Madrid */
 date_default_timezone_set('Europe/Madrid');
 if (isset($_SESSION['usuario'])) {
     header('Location: ../');
@@ -54,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($usernameCheck && $emailCheck && $pogoUsernameCheck && $levelCheck && $teamCheck && $friendCodeCheck) {
         $fieldsCheck = True;
     }
+    /* Abro la conexión a la base de datos indicada en el fichero de configuración */
     $db = db_open();
     $usernameSearch = db_query($db, "SELECT * FROM usuarios WHERE LOWER(Username) = LOWER(?)", [$usuario['Username']]);
     $emailSearch = db_query($db, "SELECT * FROM usuarios WHERE LOWER(Email) = LOWER(?)", [$usuario['Email']]);
@@ -63,13 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $emptyCheck = True;
     }
     $passwordCheck = False;
-    if ($_POST["Password"] === $_POST["Password2"]) {
+    if ($_POST["Password"] === $_POST["Password2"] && ((strlen($_POST["Password"]) >= 6 && strlen($_POST["Password"]) <= 127) && (strlen($_POST["Password2"]) >= 6 && strlen($_POST["Password2"]) <= 127))) {
         $passwordCheck = True;
     }
     $fullCheck = False;
     if ($fieldsCheck && $emptyCheck && $passwordCheck) {
         $fullCheck = True;
     }
+    /* Condición: Si hay conexión a la base de datos */
     if ($db) {
         if ($fullCheck) {
             $id = db_insert($db, 'usuarios', $usuario);
@@ -95,6 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             if (!($_POST["Password"] === $_POST["Password2"])) {
                 $_SESSION['passwordError'] = "Las contraseñas no coinciden";
+            } elseif ($_POST["Password"] === $_POST["Password2"] && (strlen($_POST["Password"]) < 6 && strlen($_POST["Password2"]) < 6)) {
+                $_SESSION['passwordError'] = "La contraseña es demasiado corta";
+            } elseif ($_POST["Password"] === $_POST["Password2"] && (strlen($_POST["Password"]) > 127 && strlen($_POST["Password"]) > 127)) {
+                $_SESSION['passwordError'] = "La contraseña es demasiado larga";
             }
             if (!(strlen($usuario['Pogo_Username']) <= 15)) {
                 $_SESSION['pogoUsernameError'] = "Tu nombre de usuario de Pokémon GO es demasiado largo";
@@ -123,21 +132,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     header('Location: ../registro');
     exit;
 }
-
-#print_r($_POST);
-#print "<br>";
-#$hashedPass = password_hash($_POST["Password"], PASSWORD_DEFAULT);
-#print $hashedPass;
-#print "<br>";
-#$verify = password_verify($_POST["Password"], $hashedPass);
-#$verify2 = password_verify($_POST["Password2"], $hashedPass);
-#$verify3 = password_verify($_POST["Password"], '$2y$10$xlkr3F6o//pEOad8nhOoVe0/Av5mYh.0TnOMrz/W0AvP8alUTV31W');
-#print "Password 1 = $verify";
-#print "<br>";
-#PRINT "Password 2 = $verify2";
-#print "<br>";
-#PRINT "Password 3 = $verify3";
-#print "<br>";
-#if ($_POST["Password"] == $_POST["Password2"]) {
-#    print "Las contraseñas coinciden";
-#}

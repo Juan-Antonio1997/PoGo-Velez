@@ -1,25 +1,13 @@
 <?php
+/* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
+/* Establezco que la zona horaria por defecto sea la de Europa/Madrid */
 date_default_timezone_set('Europe/Madrid');
 if (isset($_SESSION['usuario'])) {
     unset($_SESSION['usuario']);
     unset($_SESSION['email']);
     unset($_SESSION['pogo_username']);
     $_SESSION = [];
-    #if (ini_get("session.use_cookies")) {
-    #    $params = session_get_cookie_params();
-    #    setcookie(
-    #        session_name(),
-    #        '',
-    #        time() - 60 * 60 * 24 * 365,
-    #        $params["path"],
-    #        $params["domain"],
-    #        $params["secure"],
-    #        $params["httponly"]
-    #    );
-    #}
-    #
-    #session_destroy();
     $_SESSION['successAlert'] = "Se ha cerrado tu sesión con éxito";
     header('Location: ../');
     exit;

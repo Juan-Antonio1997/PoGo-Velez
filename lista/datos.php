@@ -1,8 +1,12 @@
 <?php
+/* Obtengo el PDO y la configuración para poder manipular bases de datos */
 require_once('../config.php');
 require_once('../db_pdo.php');
+/* Abro la conexión a la base de datos indicada en el fichero de configuración */
 $db = db_open();
+/* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
+/* Condición: Si hay conexión a la base de datos */
 if ($db) {
     if (isset($_GET['id'])) {
         $lista = db_query($db, "SELECT p.*, u.Username, u.Pogo_Username, l.Ubicacion, l.Enlace_Maps, 
@@ -15,21 +19,21 @@ if ($db) {
         WHERE ID_Lista = (?)", [$_GET['id']]);
         if (!empty($lista)) {
             $hoy = date("d/m/Y");
-            #Obtengo el número de participantes por lista
+            /* Obtengo el número de participantes de esa lista */
             $numParticipantes = db_query($db, "SELECT COUNT(Username) AS Num_Apuntados
             FROM apuntados_lista WHERE ID_Lista = (?) AND Estado != (?)", [$_GET['id'], "No voy"]);
             $lista[0]['numParticipantes'] = $numParticipantes[0]['Num_Apuntados'];
-            #Obtengo los invitados y los sumo
+            /* Obtengo los invitados presenciales y los remotos, y luego los sumo al número de participantes */
             $invitadoPresencial = db_query($db, "SELECT SUM(Invitado_presencial) AS Total_invitados_presenciales
             FROM apuntados_lista WHERE ID_Lista = (?) AND Estado != (?)", [$_GET['id'], "No voy"]);
             $invitadoRemoto = db_query($db, "SELECT SUM(Invitado_remoto) AS Total_invitados_remotos
             FROM apuntados_lista WHERE ID_Lista = (?) AND Estado != (?)", [$_GET['id'], "No voy"]);
             $lista[0]['numParticipantes'] = $lista[0]['numParticipantes'] + $invitadoPresencial[0]['Total_invitados_presenciales'] + $invitadoRemoto[0]['Total_invitados_remotos'];
-            #Obtengo el número de apuntados remotos
+            /* Obtengo el número de apuntados cuyo pase sea remoto */
             $numRemotos = db_query($db, "SELECT COUNT(Username) AS Num_Remotos
             FROM apuntados_lista WHERE ID_Lista = (?) AND Pase = (?) AND Estado != (?)", [$_GET['id'], "Remoto", "No voy"]);
             $lista[0]['numRemotos'] = $numRemotos[0]['Num_Remotos'];
-            #Sumo los invitados remotos
+            /* Sumo los invitados remotos al número de apuntados remotos */
             $lista[0]['numRemotos'] = $lista[0]['numRemotos'] + $invitadoRemoto[0]['Total_invitados_remotos'];
             $fechasLista['fechaQuedada'] = strtotime($lista[0]['Hora_quedada']);
             $quedadaLista['fecha'] = date("d/m/Y", $fechasLista['fechaQuedada']);
@@ -47,7 +51,7 @@ if ($db) {
                 $finLista['fecha'] = date("d/m/Y", $fechasLista['fechaFin']);
                 $finLista['hora'] = date("H:i", $fechasLista['fechaFin']);
             };
-            #Creo una variable para mostrar los tipos potenciados por un tiempo como atributo title
+            /* Creo una variable para mostrar los tipos potenciados por un tiempo como atributo title */
             if (isset($lista[0]['Tiempo_atmos'])) {
                 $descTiempo = match ($lista[0]['Tiempo_atmos']) {
                     "Soleado", "Despejado" => "Potencia a los tipos Planta, Tierra y Fuego",
@@ -112,5 +116,4 @@ if ($db) {
         header('Location: ../');
         exit;
     }
-    #print_r($comprobacionApuntado[0]);
 }

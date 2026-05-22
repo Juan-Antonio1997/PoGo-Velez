@@ -1,7 +1,10 @@
 <?php
+/* Obtengo el PDO y la configuración para poder manipular bases de datos */
 require_once('../config.php');
 require_once('../db_pdo.php');
+/* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
+/* Establezco que la zona horaria por defecto sea la de Europa/Madrid */
 date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder borrar una lista!";
@@ -11,7 +14,9 @@ if (!isset($_SESSION['usuario'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario['ID_Lista'] = $_POST['ID_Lista'];
     $usuario['Username'] = $_SESSION['usuario'];
+    /* Abro la conexión a la base de datos indicada en el fichero de configuración */
     $db = db_open();
+    /* Condición: Si hay conexión a la base de datos */
     if ($db) {
         $comprobacionCreador = False;
         $lista = db_query($db, "SELECT Creado_por FROM listas WHERE ID_Lista = (?)", [$usuario['ID_Lista']]);

@@ -1,7 +1,10 @@
 <?php
+/* Obtengo el PDO y la configuración para poder manipular bases de datos */
 require_once('../config.php');
 require_once('../db_pdo.php');
+/* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
+/* Establezco que la zona horaria por defecto sea la de Europa/Madrid */
 date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
@@ -30,7 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $lista['Hora_fin'] = $currDate . " " . $_POST['Hora_fin'] . ":00";
     }
     $lista['Tiempo_atmos'] = $_POST['Tiempo_atmos'];
+    /* Abro la conexión a la base de datos indicada en el fichero de configuración */
     $db = db_open();
+    /* Condición: Si hay conexión a la base de datos */
     if ($db) {
         if ($validateTime) {
             $id = db_insert($db, 'listas', $lista);

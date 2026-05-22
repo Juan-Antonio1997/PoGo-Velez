@@ -1,4 +1,5 @@
 <?php
+/* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
 if (isset($_SESSION['usuario'])) {
     header('Location: ../');
@@ -21,6 +22,8 @@ if (isset($_SESSION['usuario'])) {
             <h1 class="pageTitle">PoGo Vélez-Málaga</h1>
         </a>
         <nav>
+            <?php /* Muestro la barra de navegación que se muestra cuando no hay una sesión de usuario activa, 
+            pero sin poner enlace en la parte de inicio de sesión, ya que es esta página */ ?>
             <ul class="navList">
                 <li class="navElement"><a href="../registro">Regístrate</a></li>
                 <li class="navSelected"><span>Iniciar sesión</span></li>
@@ -28,6 +31,9 @@ if (isset($_SESSION['usuario'])) {
         </nav>
     </header>
     <section>
+        <?php /* Si hay una variable de sesión de una alerta de tipo advertencia, la muestro y la desasigno. 
+        Las alertas tienen un botón de cerrado (marcado con un símbolo de X codificado como "&times;")
+        para que, al ser pulsados, desaparezcan. */ ?>
         <?php if (isset($_SESSION['warningAlert'])): ?>
             <div class="alertBox" id="warningAlert">
                 <div class="alertWarning">
@@ -37,6 +43,7 @@ if (isset($_SESSION['usuario'])) {
             </div>
             <?php unset($_SESSION['warningAlert']) ?>
         <?php endif; ?>
+        <?php /* Si hay una variable de sesión de una alerta de tipo error, la muestro y la desasigno. */ ?>
         <?php if (isset($_SESSION['errorAlert'])): ?>
             <div class="alertBox" id="errorAlert">
                 <div class="alertError">

@@ -1,4 +1,5 @@
 <?php
+/* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
 if (isset($_SESSION['usuario'])) {
     header('Location: ../');
@@ -21,6 +22,8 @@ if (isset($_SESSION['usuario'])) {
             <h1 class="pageTitle">PoGo Vélez-Málaga</h1>
         </a>
         <nav>
+            <?php /* Muestro la barra de navegación que se muestra cuando no hay una sesión de usuario activa, 
+            pero sin poner enlace en la parte de registro, ya que es esta página */ ?>
             <ul class="navList">
                 <li class="navSelected"><span>Regístrate</span></li>
                 <li class="navElement"><a href="../login">Iniciar sesión</a></li>
@@ -28,6 +31,9 @@ if (isset($_SESSION['usuario'])) {
         </nav>
     </header>
     <section>
+        <?php /* Si hay una variable de sesión de un error al conectarse a la base de datos, la muestro 
+        como alerta y la desasigno. Las alertas tienen un botón de cerrado (marcado con un símbolo de X 
+        codificado como "&times;") para que, al ser pulsados, desaparezcan. */ ?>
         <?php if (isset($_SESSION['db_error'])): ?>
             <div class="alertBox" id="dbErrorAlert">
                 <div class="alertError">
@@ -38,6 +44,7 @@ if (isset($_SESSION['usuario'])) {
             <?php unset($_SESSION['db_error']) ?>
         <?php endif; ?>
         <form action="registro.php" method="POST" id="RegistroGoVelez" onsubmit="return register()">
+            <?php /* Si hay una variable de sesión de un error con el nombre de usuario, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['usernameError'])): ?>
                 <div class="alertBox" id="usernameErrorAlert">
                     <div class="alertError">
@@ -51,6 +58,7 @@ if (isset($_SESSION['usuario'])) {
                 <label>Usuario: </label>
                 <input type="text" name="Username" placeholder="Usuario" maxlength="20" required>
             </div>
+            <?php /* Si hay una variable de sesión de un error con el correo electrónico, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['emailError'])): ?>
                 <div class="alertBox" id="emailErrorAlert">
                     <div class="alertError">
@@ -64,6 +72,7 @@ if (isset($_SESSION['usuario'])) {
                 <label>Email: </label>
                 <input type="email" name="Email" placeholder="Email" maxlength="100" required>
             </div>
+            <?php /* Si hay una variable de sesión de un error con la contraseña (si no coinciden, por ejemplo), la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['passwordError'])): ?>
                 <div class="alertBox" id="passwordErrorAlert">
                     <div class="alertError">
@@ -76,15 +85,16 @@ if (isset($_SESSION['usuario'])) {
             <div id="passwordDiv">
                 <label>Contraseña: </label>
                 <input type="password" name="Password" placeholder="Contraseña"
-                    title="La contraseña tiene que tener al menos 6 carácteres. Esos carácteres pueden ser mayúsculas, minúsculas, números o uno de estos carácteres especiales: @ # $ % ^ & - + = ( )"
+                    title="La contraseña tiene que tener al menos 6 caracteres. Esos caracteres pueden ser mayúsculas, minúsculas, números o uno de estos caracteres especiales: @ # $ % ^ & - + = ( )"
                     pattern="^[A-Za-z0-9\@\#\$\%\^\&\-\+\=\(\)]{6,}$" maxlength="127" required>
             </div>
             <div id="password2Div">
                 <label>Confirma tu contraseña: </label>
                 <input type="password" name="Password2" placeholder="Contraseña"
-                    title="La contraseña tiene que tener al menos 6 carácteres. Esos carácteres pueden ser mayúsculas, minúsculas, números o uno de estos carácteres especiales: @ # $ % ^ & - + = ( )"
+                    title="La contraseña tiene que tener al menos 6 caracteres. Esos caracteres pueden ser mayúsculas, minúsculas, números o uno de estos caracteres especiales: @ # $ % ^ & - + = ( )"
                     pattern="^[A-Za-z0-9\@\#\$\%\^\&\-\+\=\(\)]{6,}$" maxlength="127" required>
             </div>
+            <?php /* Si hay una variable de sesión de un error con el nombre de usuario de Pokémon Go, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['pogoUsernameError'])): ?>
                 <div class="alertBox" id="pogoUsernameErrorAlert">
                     <div class="alertError">
@@ -98,6 +108,7 @@ if (isset($_SESSION['usuario'])) {
                 <label>Usuario de Pokémon GO: </label>
                 <input type="text" name="Pogo_Username" placeholder="Usuario de Pokémon GO" maxlength="15" required>
             </div>
+            <?php /* Si hay una variable de sesión de un error con el nivel, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['levelError'])): ?>
                 <div class="alertBox" id="levelErrorAlert">
                     <div class="alertError">
@@ -111,6 +122,7 @@ if (isset($_SESSION['usuario'])) {
                 <label>Nivel: </label>
                 <input type="number" name="Level" placeholder="1-80" title="El nivel es: Mínimo 1 - Máximo: 80" min=1 max=80 required>
             </div>
+            <?php /* Si hay una variable de sesión de un error con el equipo, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['teamError'])): ?>
                 <div class="alertBox" id="teamErrorAlert">
                     <div class="alertError">
@@ -136,6 +148,7 @@ if (isset($_SESSION['usuario'])) {
                     <img src="../media/website/Logo_Equipo_Valor_GO.png" alt="Valor" title="Valor" width="50" height="50">
                 </label>
             </div>
+            <?php /* Si hay una variable de sesión de un error con el código de amigo, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['friendCodeError'])): ?>
                 <div class="alertBox" id="friendCodeAlert">
                     <div class="alertError">

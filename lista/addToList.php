@@ -1,7 +1,10 @@
 <?php
+/* Obtengo el PDO y la configuración para poder manipular bases de datos */
 require_once('../config.php');
 require_once('../db_pdo.php');
+/* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
+/* Establezco que la zona horaria por defecto sea la de Europa/Madrid */
 date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder apuntarte a una lista!";
@@ -17,7 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $currTime = date("H:i:s");
     $usuario['Hora_apuntado'] = $currDate . " " . $currTime;
     $usuario['Hora_ultimo_cambio'] = $currDate . " " . $currTime;
+    /* Abro la conexión a la base de datos indicada en el fichero de configuración */
     $db = db_open();
+    /* Condición: Si hay conexión a la base de datos */
     if ($db) {
         $comprobacionApuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?)", [$usuario['ID_Lista'], $usuario['Username']]);
         $comprobacionDesapuntado = db_query($db, "SELECT * FROM apuntados_lista WHERE ID_Lista = (?) AND Username = (?) AND Estado = (?)", [$usuario['ID_Lista'], $usuario['Username'], "No voy"]);

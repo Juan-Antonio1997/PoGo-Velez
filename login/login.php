@@ -1,13 +1,18 @@
 <?php
+/* Obtengo el PDO y la configuración para poder manipular bases de datos */
 require_once('../config.php');
 require_once('../db_pdo.php');
+/* Abro la conexión a la base de datos indicada en el fichero de configuración */
 $db = db_open();
+/* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
+/* Establezco que la zona horaria por defecto sea la de Europa/Madrid */
 date_default_timezone_set('Europe/Madrid');
 if (isset($_SESSION['usuario'])) {
     header('Location: ../');
     exit;
 }
+/* Condición: Si hay conexión a la base de datos */
 if ($db) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $usuario = db_query($db, "SELECT * FROM usuarios WHERE LOWER(Username)=LOWER(?) OR LOWER(Email)=LOWER(?)", [$_POST['User'], $_POST['User']]);
