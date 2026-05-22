@@ -8,6 +8,8 @@ session_start();
 date_default_timezone_set('Europe/Madrid');
 if (isset($_SESSION['usuario'])) {
     header('Location: ../');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -84,6 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             db_close($db);
             $_SESSION['successAlert'] = "Tu registro se ha realizado con éxito. ¡Bienvenid@, " . $usuario['Username'] . "!";
             header('Location: ../');
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         } else {
             if (!(strlen($usuario['Username']) <= 20)) {
@@ -121,14 +125,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['friendCodeError'] = "Tu código de amigo no es válido";
             }
             header('Location: ../registro');
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         }
     } else {
         $_SESSION['db_error'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta registrarte de nuevo más tarde.";
         header('Location: ../registro');
+        /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+        resto de funciones */
         exit;
     }
 } else {
     header('Location: ../registro');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }

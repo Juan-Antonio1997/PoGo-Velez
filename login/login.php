@@ -10,6 +10,8 @@ session_start();
 date_default_timezone_set('Europe/Madrid');
 if (isset($_SESSION['usuario'])) {
     header('Location: ../');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }
 /* Condición: Si hay conexión a la base de datos */
@@ -27,23 +29,33 @@ if ($db) {
                 $_SESSION['pogo_username'] = $pogo_username;
                 $_SESSION['successAlert'] = "¡Bienvenid@, " . $username . "!";
                 header('Location: ../');
+                /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+                resto de funciones */
                 exit;
             } else {
                 $_SESSION['errorAlert'] = 'Usuario, email o contraseña incorrecto';
                 header('Location: ../login');
+                /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+                resto de funciones */
                 exit;
             }
         } else {
             $_SESSION['errorAlert'] = 'Usuario, email o contraseña incorrecto';
             header('Location: ../login');
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         }
     } else {
         header('Location: ../login');
+        /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+        resto de funciones */
         exit;
     }
 } else {
     $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta iniciar sesión más tarde.";
     header('Location: ../login');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }

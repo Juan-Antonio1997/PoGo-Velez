@@ -9,6 +9,8 @@ date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder apuntarte a una lista!";
     header('Location: ../login');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -31,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             db_close($db);
             $_SESSION['successAlert'] = "¡Te has apuntado a esta lista como " . strtolower($usuario['Pase']) . "!";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         } elseif (!empty($comprobacionDesapuntado)) {
             $addBack = db_query($db, "UPDATE apuntados_lista
@@ -39,18 +43,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             db_close($db);
             $_SESSION['successAlert'] = "¡Te has vuelto a apuntar a esta lista como " . strtolower($usuario['Pase']) . "!";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         } else {
             $_SESSION['errorAlert'] = "Se ha producido un error al intentar apuntarte a esta lista. Por favor, inténtalo de nuevo más tarde.";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         }
     } else {
         $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta apuntarte a esta lista más tarde.";
         header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+        /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+        resto de funciones */
         exit;
     }
 } else {
     header('Location: ../');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }

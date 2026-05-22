@@ -9,6 +9,8 @@ date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder desapuntarte de una lista!";
     header('Location: ../login');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -32,18 +34,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             db_close($db);
             $_SESSION['successAlert'] = "Te he desapuntado de esta lista, pero tu nombre aún aparecerá en ella, aunque estará tachado";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         } else {
             $_SESSION['errorAlert'] = "Se ha producido un error al intentar desapuntarte de esta lista. Por favor, inténtalo de nuevo más tarde.";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         }
     } else {
         $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta desapuntarte de esta lista más tarde.";
         header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+        /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+        resto de funciones */
         exit;
     }
 } else {
     header('Location: ../');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }

@@ -9,6 +9,8 @@ session_start();
 if (!isset($_SESSION['usuario'])) {
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
     header('Location: ../login');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }
 /* Condición: Si hay conexión a la base de datos */

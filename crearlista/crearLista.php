@@ -9,6 +9,8 @@ date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
     header('Location: ../login');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -49,18 +51,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             db_close($db);
             $_SESSION['successAlert'] = "¡Se ha creado la lista con éxito! Su ID es: " . $id;
             header("Location: ../lista/?id=" . $id);
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         } else {
             $_SESSION['errorAlert'] = "Se ha producido un error al crear la lista. Por favor, inténtalo de nuevo más tarde.";
             header("Location: ../crearlista");
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         }
     } else {
         $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta crear la lista más tarde.";
         header("Location: ../crearlista");
+        /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+        resto de funciones */
         exit;
     }
 } else {
     header('Location: ../crearLista');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }

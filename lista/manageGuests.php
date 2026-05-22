@@ -9,6 +9,8 @@ date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder hacer cambios en una lista!";
     header('Location: ../login');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -51,10 +53,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 db_close($db);
                 $_SESSION['successAlert'] = "He cambiado el número de personas que te van a acompañar de forma presencial a: " . $usuario['Invitado_presencial'];
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+                /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+                resto de funciones */
                 exit;
             } else {
                 $_SESSION['errorAlert'] = "Ha ocurrido un error al intentar añadir invitados presenciales: El número de participantes totales habría excedido el máximo permitido si se hubiesen añadido esos invitados";
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+                /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+                resto de funciones */
                 exit;
             }
         } elseif (!empty($comprobacionApuntado) && $_POST['Tipo_Invitado'] == "Remoto") {
@@ -66,23 +72,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 db_close($db);
                 $_SESSION['successAlert'] = "He cambiado el número de personas que vas a invitar de forma remota a: " . $usuario['Invitado_remoto'];
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+                /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+                resto de funciones */
                 exit;
             } else {
                 $_SESSION['errorAlert'] = "Ha ocurrido un error al intentar añadir invitados remotos: El número de participantes remotos totales habría excedido el máximo permitido si se hubiesen añadido esos invitados";
                 header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+                /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+                resto de funciones */
                 exit;
             }
         } else {
             $_SESSION['errorAlert'] = "SE ha producido un error al intentar cambiar el número de invitados: Inténtalo de nuevo más tarde";
             header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+            /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+            resto de funciones */
             exit;
         }
     } else {
         $_SESSION['errorAlert'] = "Se ha producido un error de conexión a la base de datos. Por favor, intenta cambiar el número de personas que vas a invitar a esta lista más tarde.";
         header("Location: ../lista/?id=" . $usuario['ID_Lista']);
+        /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+        resto de funciones */
         exit;
     }
 } else {
     header('Location: ../');
+    /* Y con "exit" hago que se detenga el script, para que no ejecute el 
+    resto de funciones */
     exit;
 }
