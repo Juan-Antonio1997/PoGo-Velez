@@ -55,6 +55,7 @@ if (isset($_SESSION['usuario'])) {
             </div>
             <?php unset($_SESSION['errorAlert']) ?>
         <?php endif; ?>
+        <?php /* Creo un formulario para el inicio de sesión */ ?>
         <form action="login.php" method="POST">
             <div>
                 <label>Usuario o Email: </label>
@@ -67,6 +68,7 @@ if (isset($_SESSION['usuario'])) {
             <div>
                 <input type="submit" value="Acceder">
             </div>
+            <?php /* Introduzco un enlace para los que no tienen una cuenta, que se vayan a la página de registro */ ?>
             <div>
                 <a class="registerLink" href="../registro">¿No tienes una cuenta? Regístrate aquí</a>
             </div>
