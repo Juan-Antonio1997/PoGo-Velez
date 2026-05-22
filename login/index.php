@@ -68,11 +68,11 @@ if (isset($_SESSION['usuario'])) {
             <div>
                 <input type="submit" value="Acceder">
             </div>
-            <?php /* Introduzco un enlace para los que no tienen una cuenta, que se vayan a la página de registro */ ?>
-            <div>
-                <a class="registerLink" href="../registro">¿No tienes una cuenta? Regístrate aquí</a>
-            </div>
         </form>
+        <?php /* Introduzco un enlace para los que no tienen una cuenta, que se vayan a la página de registro */ ?>
+        <div>
+            <a class="registerLink" href="../registro">¿No tienes una cuenta? Regístrate aquí</a>
+        </div>
     </section>
     <footer>
         <div>Juan Antonio Gómez Martín - 2026</div>

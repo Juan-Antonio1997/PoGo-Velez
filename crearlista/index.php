@@ -68,6 +68,8 @@ if ($db) {
             <?php endif; ?>
             <form action="crearLista.php" method="POST">
                 <div>Jefe de incursión: <span id="bossName"></span></div>
+                <?php /* En el campo de selección del jefe de incursión he ocultado los botones de radio con CSS, y he hecho que las imagenes funcionen 
+                como esos botones. Cada imagen tendrá un borde negro si no está seleccionada, y un borde rojo si está marcada */ ?>
                 <div id="bossSelection">
                     <?php foreach ($raidBosses as $raidBoss): ?>
                         <?php if ($raidBoss['Tipo_Raid'] == "Oscura"): ?>
@@ -139,6 +141,8 @@ if ($db) {
                     <label>Hora de fin (Opcional): </label>
                     <input type="time" name="Hora_fin">
                 </div>
+                <?php /* En el campo de selección del tiempo atmosférico he ocultado los botones de radio con CSS, y he hecho que las imagenes 
+                funcionen como esos botones. Cada imagen tendrá un borde negro si no está seleccionada, y un borde rojo si está marcada */ ?>
                 <div>
                     <label>Tiempo atmosférico (Opcional): <span id="weatherName"></span></label>
                 </div>

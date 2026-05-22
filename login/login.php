@@ -68,7 +68,7 @@ if ($db) {
             exit;
         }
     } else {
-        /* Si la petición no es de tipo POST, mando directamente al usuarioo a la página 
+        /* Si la petición no es de tipo POST, mando al usuario directamente a la página 
         de login */
         header('Location: ../login');
         /* Y con "exit" hago que se detenga el script, para que no ejecute el 

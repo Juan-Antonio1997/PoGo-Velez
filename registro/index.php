@@ -45,6 +45,7 @@ if (isset($_SESSION['usuario'])) {
             </div>
             <?php unset($_SESSION['db_error']) ?>
         <?php endif; ?>
+        <?php /* Creo un formulario para el registro de un usuario, haciendo que se ejecute una función al hacer un submit */ ?>
         <form action="registro.php" method="POST" id="RegistroGoVelez" onsubmit="return register()">
             <?php /* Si hay una variable de sesión de un error con el nombre de usuario, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['usernameError'])): ?>
@@ -84,6 +85,7 @@ if (isset($_SESSION['usuario'])) {
                 </div>
                 <?php unset($_SESSION['passwordError']) ?>
             <?php endif; ?>
+            <?php /* Hago que los campos de contraseña tengan que cumplir con un patrón determinado, explicado en el atributo "title" */ ?>
             <div id="passwordDiv">
                 <label>Contraseña: </label>
                 <input type="password" name="Password" placeholder="Contraseña"
@@ -106,9 +108,12 @@ if (isset($_SESSION['usuario'])) {
                 </div>
                 <?php unset($_SESSION['pogoUsernameError']) ?>
             <?php endif; ?>
+            <?php /* La verdad es que hice los campos nombre de usuario y nombre de usuario en Pokémon GO sean distintos para aquellas 
+            personas (como yo) que quieren tener un nombre de usuario diferente al nombre de usuario en Pokémon GO.
+            Ejemplo personal: Nombre de usuario - 08Juan80 | Nombre de usuario en Pokémon GO - x08Juan80x (08Juan80 no está disponible) */ ?>
             <div id="pogoUsernameDiv">
-                <label>Usuario de Pokémon GO: </label>
-                <input type="text" name="Pogo_Username" placeholder="Usuario de Pokémon GO" maxlength="15" required>
+                <label>Nombre de usuario en Pokémon GO: </label>
+                <input type="text" name="Pogo_Username" placeholder="Nombre de usuario en Pokémon GO" maxlength="15" required>
             </div>
             <?php /* Si hay una variable de sesión de un error con el nivel, la muestro y la desasigno. */ ?>
             <?php if (isset($_SESSION['levelError'])): ?>
@@ -134,6 +139,8 @@ if (isset($_SESSION['usuario'])) {
                 </div>
                 <?php unset($_SESSION['teamError']) ?>
             <?php endif; ?>
+            <?php /* En el campo de selección de equipo he ocultado los botones de radio con CSS, y he hecho que las imagenes funcionen 
+            como esos botones. Cada imagen tendrá un borde negro si no está seleccionada, y un borde rojo si está marcada */ ?>
             <div id="teamSelection">
                 <label>Equipo: <span id="teamName"></span></label><br>
                 <input type="hidden" id="Sin_equipo" name="Team" value="Sin equipo">
@@ -160,6 +167,7 @@ if (isset($_SESSION['usuario'])) {
                 </div>
                 <?php unset($_SESSION['friendCodeError']) ?>
             <?php endif; ?>
+            <?php /* Hago que el campo de código de amigo tenga que cumplir con un patrón determinado, explicado en el atributo "title", con ejemplos */ ?>
             <div id="friendCodeDiv">
                 <label>Código de amigo: </label>
                 <input type="text" name="Friend_code" placeholder="Código de amigo"
@@ -170,7 +178,10 @@ if (isset($_SESSION['usuario'])) {
                 <input type="submit" value="Regístrame">
             </div>
         </form>
-        <a class="loginLink" href="../login">¿Ya tienes una cuenta? Inicia sesión aquí</a>
+        <?php /* Introduzco un enlace para los que ya tengan una cuenta, que se vayan a la página de login */ ?>
+        <div>
+            <a class="loginLink" href="../login">¿Ya tienes una cuenta? Inicia sesión aquí</a>
+        </div>
     </section>
     <footer>
         <div>Juan Antonio Gómez Martín - 2026</div>
