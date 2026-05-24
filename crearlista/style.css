@@ -19,6 +19,8 @@ body {
     background-color: #333333;
 }
 
+/* Hago que los enlaces de la barra de navegación aparezcan en la derecha 
+(pero con el orden inverso al introducido en el documento HTML */
 .navElement {
     float: right;
 }
@@ -34,6 +36,11 @@ body {
 .navElement a:hover {
     background-color: #111111;
 }
+
+/* Hago que la posición de cada opción de jefe de incursión de la lista 
+sea relativa para poder mostrar los iconos de variocolor, oscuro, dinamax 
+y gigamax en una posición parecida a la que tienen en el juego usando la 
+posición absoluta en cada icono */
 
 .listOption {
     display: inline-block;
@@ -99,6 +106,10 @@ section {
     margin: 5px;
 }
 
+/* Hago que la caja de alerta sea un grid para mostrar el botón 
+de cierre a la derecha, y le doy color a los tipos de alertas 
+que pueden aparecer en la página */
+
 .alertBox {
     display: grid;
     width: auto;
@@ -114,6 +125,10 @@ section {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+/* Le doy una animación al icono de cierre para que, 
+al pasar el ratón sobre él, su color cambie de blanco
+a negro */
 
 .closeAlertBtn {
     margin-left: 15px;

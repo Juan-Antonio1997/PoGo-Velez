@@ -14,6 +14,8 @@ body {
     background-color: #333333;
 }
 
+/* Hago que los enlaces de la barra de navegación aparezcan en la derecha 
+(pero con el orden inverso al introducido en el documento HTML */
 .navElement, .navSelected {
     float: right;
 }
@@ -53,6 +55,10 @@ form {
     color: #0000FF
 }
 
+/* Hago que la caja de alerta sea un grid para mostrar el botón 
+de cierre a la derecha, y le doy color a los tipos de alertas 
+que pueden aparecer en la página */
+
 .alertBox {
     display: grid;
     width: auto;
@@ -76,6 +82,10 @@ form {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+/* Le doy una animación al icono de cierre para que, 
+al pasar el ratón sobre él, su color cambie de blanco
+a negro */
 
 .closeAlertBtn {
     margin-left: 15px;
