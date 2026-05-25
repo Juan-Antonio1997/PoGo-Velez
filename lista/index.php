@@ -1,7 +1,10 @@
 <?php
 include 'datos.php';
 if (!isset($_SESSION['usuario'])) {
+    /* Si no hay una variable de sesión para el usuario, no tiene la sesión iniciada (y no quiero que 
+    se pueda acceder a esta página sin iniciar sesión) */
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder acceder a una lista!";
+    /* Redirijo al usuario a la página de inicio de sesión */
     header('Location: ../login');
     /* Y con "exit" hago que se detenga el script, para que no ejecute el 
     resto de funciones */

@@ -7,7 +7,10 @@ session_start();
 /* Establezco que la zona horaria por defecto sea la de Europa/Madrid */
 date_default_timezone_set('Europe/Madrid');
 if (!isset($_SESSION['usuario'])) {
+    /* Si no hay una variable de sesión para el usuario, no tiene la sesión iniciada (y no quiero que 
+    se pueda acceder a esta página sin iniciar sesión) */
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder hacer cambios en una lista!";
+    /* Redirijo al usuario a la página de inicio de sesión */
     header('Location: ../login');
     /* Y con "exit" hago que se detenga el script, para que no ejecute el 
     resto de funciones */

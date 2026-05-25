@@ -59,6 +59,7 @@ form {
     margin: 5px;
 }
 
+/* Oculto el botón de input type radio */
 .radioImg { 
   position: absolute;
   opacity: 0;
@@ -66,12 +67,16 @@ form {
   height: 0;
 }
 
+/* Con esto hago que la imagen parezca que 
+sea el botón de input type radio */
 .radioImg + img {
   cursor: pointer;
   outline: 2px solid #8f8f9d;
   padding: 5px;
 }
 
+/* Cambio el color del borde de la imagen 
+que corresponde a la opción señalada */
 .radioImg:checked + img {
   outline: 2px solid #ff0000;
   padding: 5px;

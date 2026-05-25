@@ -7,7 +7,10 @@ $db = db_open();
 /* Inicio la sesión (activo las variables $_SESSION) */
 session_start();
 if (!isset($_SESSION['usuario'])) {
+    /* Si no hay una variable de sesión para el usuario, no tiene la sesión iniciada (y no quiero que 
+    se pueda acceder a esta página sin iniciar sesión) */
     $_SESSION['warningAlert'] = "¡Tienes que iniciar sesión antes de poder crear una lista!";
+    /* Redirijo al usuario a la página de inicio de sesión */
     header('Location: ../login');
     /* Y con "exit" hago que se detenga el script, para que no ejecute el 
     resto de funciones */
@@ -15,6 +18,7 @@ if (!isset($_SESSION['usuario'])) {
 }
 /* Condición: Si hay conexión a la base de datos */
 if ($db) {
+    /* Obtengo las incursiones activas, con los detalles del Pokémon que actúa como jefe de incursión */
     $raidBosses = db_query($db, "SELECT i.*, p.* 
     FROM incursiones AS i 
     INNER JOIN pokemon AS p ON p.ID_Pokemon = i.ID_Pokemon
@@ -66,11 +70,14 @@ if ($db) {
                 </div>
                 <?php unset($_SESSION['errorAlert']) ?>
             <?php endif; ?>
+            <?php /* Creo un formulario para recoger los datos de la lista que se va a crear, y el tipo de pase que va a usar el usuario, 
+            ya que será apuntado a esa lista */ ?>
             <form action="crearLista.php" method="POST">
                 <div>Jefe de incursión: <span id="bossName"></span></div>
                 <?php /* En el campo de selección del jefe de incursión he ocultado los botones de radio con CSS, y he hecho que las imagenes funcionen 
                 como esos botones. Cada imagen tendrá un borde negro si no está seleccionada, y un borde rojo si está marcada */ ?>
                 <div id="bossSelection">
+                    <?php /* Abro un bucle for each para mostrar todas las incursiones activas */ ?>
                     <?php foreach ($raidBosses as $raidBoss): ?>
                         <?php if ($raidBoss['Tipo_Raid'] == "Oscura"): ?>
                             <?php /* Si el tipo de incursión es oscura, muestro el icono de un Pokémon oscuro, 
