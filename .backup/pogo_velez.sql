@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db
--- Tiempo de generación: 15-05-2026 a las 09:00:08
+-- Tiempo de generación: 25-05-2026 a las 03:06:23
 -- Versión del servidor: 12.2.2-MariaDB-ubu2404
 -- Versión de PHP: 8.3.26
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `pogo_velez`
 --
+CREATE DATABASE IF NOT EXISTS `pogo_velez` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;
+USE `pogo_velez`;
 
 -- --------------------------------------------------------
 
@@ -47,12 +49,16 @@ INSERT INTO `apuntados_lista` (`ID_Lista`, `Username`, `Pase`, `Estado`, `Invita
 (3, 'jgommar464', 'Remoto', 'Voy', 3, 0, '2026-04-30 13:20:00', '2026-04-30 13:20:00'),
 (5, '08Juan80', 'Presencial', 'Estoy', 0, 0, '2026-04-30 11:01:10', '2026-05-08 12:29:25'),
 (5, 'jgommar464', 'Presencial', 'No voy', 0, 0, '2026-04-30 11:02:10', '2026-04-30 11:06:10'),
-(6, '08Juan80', 'Presencial', 'Voy', 0, 0, '2026-04-30 11:39:09', '2026-04-30 11:39:09'),
-(7, '08Juan80', 'Presencial', 'Estoy', 0, 5, '2026-04-30 15:19:44', '2026-05-08 17:59:26'),
+(6, '08Juan80', 'Presencial', 'Voy', 0, 0, '2026-04-30 11:39:09', '2026-05-15 17:31:16'),
+(7, '08Juan80', 'Presencial', 'Estoy', 0, 5, '2026-04-30 15:19:44', '2026-05-15 13:30:37'),
 (7, 'jgommar464', 'Presencial', 'Voy', 12, 1, '2026-05-04 18:00:48', '2026-05-05 10:13:24'),
-(8, '08Juan80', 'Presencial', 'Voy', 0, 7, '2026-05-08 13:42:23', '2026-05-08 13:42:23'),
+(8, '08Juan80', 'Presencial', 'Voy', 0, 7, '2026-05-08 13:42:23', '2026-05-15 17:30:34'),
 (8, 'jgommar464', 'Presencial', 'Voy', 0, 20, '2026-05-05 17:36:25', '2026-05-05 17:36:25'),
-(9, 'jgommar464', 'Remoto', 'Voy', 0, 0, '2026-05-05 17:41:32', '2026-05-08 11:59:50');
+(9, '08Juan80', 'Presencial', 'Llego tarde', 0, 0, '2026-05-21 16:36:26', '2026-05-21 17:40:13'),
+(9, 'jgommar464', 'Remoto', 'Voy', 0, 0, '2026-05-05 17:41:32', '2026-05-08 11:59:50'),
+(10, '08Juan80', 'Presencial', 'Voy', 0, 0, '2026-05-15 12:59:01', '2026-05-15 12:59:01'),
+(10, 'jgommar464', 'Remoto', 'Voy', 0, 9, '2026-05-15 13:02:57', '2026-05-15 13:03:43'),
+(11, '08Juan80', 'Presencial', 'Voy', 0, 0, '2026-05-25 03:43:58', '2026-05-25 03:43:58');
 
 --
 -- Disparadores `apuntados_lista`
@@ -88,7 +94,8 @@ CREATE TABLE `apuntados_lista_borrada` (
 
 INSERT INTO `apuntados_lista_borrada` (`ID_Lista_Borrada`, `Username`, `Pase`, `Estado`, `Invitado_presencial`, `Invitado_remoto`, `Hora_apuntado`, `Hora_ultimo_cambio`) VALUES
 (4, '08Juan80', 'Remoto', 'Voy', 2, 0, '2026-04-29 15:42:06', '2026-04-29 15:42:06'),
-(4, 'jgommar464', 'Presencial', 'Voy', 0, 0, '2026-05-05 10:56:54', '2026-05-05 10:56:54');
+(4, 'jgommar464', 'Presencial', 'Voy', 0, 0, '2026-05-05 10:56:54', '2026-05-05 10:56:54'),
+(9, '08Juan80', 'Presencial', 'Voy', 0, 0, '2026-05-21 16:26:12', '2026-05-21 16:35:50');
 
 -- --------------------------------------------------------
 
@@ -155,11 +162,13 @@ CREATE TABLE `listas` (
 
 INSERT INTO `listas` (`ID_Lista`, `ID_Raid`, `Creado_por`, `Ubicacion`, `Enlace_Maps`, `Hora_creacion`, `Hora_quedada`, `Hora_inicio`, `Hora_fin`, `Tiempo_atmos`) VALUES
 (3, 4, '08Juan80', 'Caballo Pegaso', NULL, '2026-04-29 15:23:49', '2026-04-30 12:28:00', NULL, NULL, 'Soleado'),
-(5, 3, '08Juan80', 'Orange', NULL, '2026-04-30 11:01:10', '2026-05-15 19:15:00', NULL, NULL, 'Soleado'),
-(6, 8, '08Juan80', 'Cruz de Hierro', NULL, '2026-04-30 11:39:09', '2026-05-15 18:45:00', NULL, NULL, 'Viento'),
-(7, 9, '08Juan80', 'Cruz de Hierro', 'https://maps.app.goo.gl/CK166tZuZiyXdLxF8', '2026-04-30 15:19:44', '2026-05-15 19:00:00', '2026-05-08 19:00:00', '2026-05-08 19:45:00', 'Soleado'),
-(8, 13, 'jgommar464', 'Parque María Zambrano', NULL, '2026-05-05 17:36:25', '2026-05-15 18:30:00', NULL, NULL, 'Parcialmente nublado (día)'),
-(9, 14, 'jgommar464', 'Bem Idiomas', NULL, '2026-05-05 17:41:32', '2026-05-15 18:15:00', NULL, NULL, 'Parcialmente nublado (día)');
+(5, 3, '08Juan80', 'Orange', NULL, '2026-04-30 11:01:10', '2026-05-21 19:15:00', NULL, NULL, 'Soleado'),
+(6, 8, '08Juan80', 'Cruz de Hierro', NULL, '2026-04-30 11:39:09', '2026-05-21 18:45:00', NULL, NULL, 'Viento'),
+(7, 9, '08Juan80', 'Cruz de Hierro', 'https://maps.app.goo.gl/CK166tZuZiyXdLxF8', '2026-04-30 15:19:44', '2026-05-21 19:00:00', '2026-05-08 19:00:00', '2026-05-08 19:45:00', 'Soleado'),
+(8, 13, 'jgommar464', 'Parque María Zambrano', NULL, '2026-05-05 17:36:25', '2026-05-21 18:30:00', NULL, NULL, 'Parcialmente nublado (día)'),
+(9, 14, 'jgommar464', 'Bem Idiomas', NULL, '2026-05-05 17:41:32', '2026-05-21 18:15:00', NULL, NULL, 'Parcialmente nublado (día)'),
+(10, 11, '08Juan80', 'Camaleón Metálico', 'https://maps.app.goo.gl/zSmFibfASH3RSzKCA', '2026-05-15 12:59:01', '2026-05-21 18:00:00', '2026-05-15 18:00:00', '2026-05-15 18:45:00', 'Viento'),
+(11, 12, '08Juan80', 'Supermercado Día', NULL, '2026-05-25 03:43:58', '2026-05-25 14:00:00', NULL, NULL, 'Soleado');
 
 --
 -- Disparadores `listas`
@@ -501,7 +510,7 @@ ALTER TABLE `incursiones`
 -- AUTO_INCREMENT de la tabla `listas`
 --
 ALTER TABLE `listas`
-  MODIFY `ID_Lista` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID_Lista` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `listas_borradas`
